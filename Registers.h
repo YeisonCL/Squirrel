@@ -39,5 +39,6 @@ void createAllRegisters(); /*Función encargada de asignar memoria para cada uno
 void destroyAllRegisters(); /*Función encargada de destruir toda la memoria asignada a cada uno de los 15 registros existentes*/
 void modifyRegister(int pRegister, int pData);
 int *getRegister(int pRegister);
+void resetRegisters();
 
 #endif

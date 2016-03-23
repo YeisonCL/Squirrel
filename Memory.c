@@ -41,3 +41,11 @@ void modifyMemory(int pAddress, int pData)
 {
     _memory[pAddress] = pData;
 }
+
+void resetMemory()
+{
+    for(int i = 0; i <= 511; i = i +1)
+    {
+        _memory[i] = 0;
+    }
+}

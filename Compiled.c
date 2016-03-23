@@ -14,12 +14,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "Compiled.h"
 #include "Memory.h"
 #include "Registers.h"
 #include "Instructions.h"
+#include "ParserMiscellaneous.h"
 #include "ARMYacc.tab.h"
+#include "InstructionList.h"
 
 const int COMPILE = 0;
 const int COMPILEANDSIMULE = 1;
@@ -27,9 +30,10 @@ const int COMPILEANDSIMULE = 1;
 const int START = 1;
 const int END = 0;
 
-int compiledFile = 0;
+FILE *compiledFile;
+int i;
 
-void writeHeader(int pFile);
+void writeHeader();
 void verifyTypeCompilation(int pTypeCompilation, int pControlFlag);
 int conditionalBinaryCode(int pConditional);
 int cmdBinaryCode(int pInstruction);
@@ -41,7 +45,7 @@ int compileBranchInstruction(Instruction *pInstruction);
 int testIndexMode(int pIndexMode, int pValue, int pControlFlag);
 int testMemoryInstruction(int pInstruction, int pValue, int pControlFlag);
 int testOperationTwoInstruction(int pInstruction, int pValue);
-void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex, int pFile);
+void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex);
 
 int conditionalBinaryCode(int pConditional)
 {
@@ -191,7 +195,22 @@ void executeCompilation(int pTypeCompilation)
 
     printf("Start compilation...\n");
     verifyTypeCompilation(pTypeCompilation, START);
-    //COMPILAR INSTRUCCION
+    int totalInstructions = getLastInstruction();
+    //DEBUGGING
+    printf("%d\n", totalInstructions);
+    //DEBUGGING
+    for(i = 0; i <= totalInstructions; i = i + 1)
+    {
+        Instruction *test = getInstruction(i);
+        //DEBUGGING
+        printf("Compilando instruccion: %d\n", test);
+        //DEBUGGING
+        int compiledInstruction = compileInstruction(test);
+        //DEBUGGING
+        printf("Instruccion compilada: %u\n", compiledInstruction);
+        //DEBUGGING
+        saveCompiledInstruction(pTypeCompilation, compiledInstruction, i);
+    }
     verifyTypeCompilation(pTypeCompilation, END);
     printf("End compilation...\n");
 }
@@ -200,33 +219,47 @@ void verifyTypeCompilation(int pTypeCompilation, int pControlFlag)
 {
     if(pTypeCompilation == COMPILE && pControlFlag == START)
     {
-        compiledFile = open("out.txt", O_RDWR);
-        writeHeader(compiledFile);
+        compiledFile = fopen("/root/Desktop/Squirrel/out.txt", "w");
+        writeHeader();
     }
-    if(pTypeCompilation == COMPILE && pControlFlag == END)
+    else if(pTypeCompilation == COMPILE && pControlFlag == END)
     {
-        close(compiledFile);
+        fclose(compiledFile);
     }
 }
 
-void writeHeader(int pFile)
+void writeHeader()
 {
-    char *header = "*********************************************\n*		Instituto Tecnológico de Costa Rica  *\n*		Ingeniería en Computadores           *\n*		Arquitectura de Computadores         *\n*		I  Semestre 2016                     *\n*		                                     *\n*		Author: Yeison Cruz León             *\n*               Joseph Cruz Loaiza           *\n*		Carne: 201258348                     *\n*              201258359                     *\n**********************************************\n\n\n";
-    write(pFile, header, strlen(header));
+    char *header = "******************************************\n"
+                   "*   Instituto Tecnológico de Costa Rica  *\n"
+                   "*   Ingeniería en Computadores           *\n"
+                   "*   Arquitectura de Computadores         *\n"
+                   "*   I  Semestre 2016                     *\n"
+                   "*                                        *\n"
+                   "*   Author: Yeison Cruz León             *\n"
+                   "*           Joseph Cruz Loaiza           *\n"
+                   "*   Carne: 201258348                     *\n"
+                   "*          201258359                     *\n"
+                   "******************************************\n\n\n";
+    fprintf(compiledFile, header);
 }
 
-void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex, int pFile)
+void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex)
 {
     if(pTypeCompilation == COMPILE)
     {
-        char *instructionStr = 0;
-        char *indexStr = 0;
-        sprintf(instructionStr, "%u", pInstruction);
-        sprintf(indexStr, "%d", pIndex);
+        char *instructionStr = (char*) calloc(32, sizeof (char));
+        char *indexStr = (char*) calloc(32, sizeof (char));
+        sprintf(instructionStr, "%X", (unsigned int)pInstruction);
+        sprintf(indexStr, "%X", (unsigned int)pIndex);
         strcat(indexStr, "\t");
         strcat(instructionStr, "\n");
-        write(pFile, indexStr, strlen(indexStr));
-        write(pFile, instructionStr, strlen(instructionStr));
+        fprintf(compiledFile, "0x");
+        fprintf(compiledFile, indexStr);
+        fprintf(compiledFile, "0x");
+        fprintf(compiledFile, instructionStr);
+        free(instructionStr);
+        free(indexStr);
     }
     else
     {
@@ -236,27 +269,30 @@ void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex,
 
 int compileInstruction(Instruction *pInstruction)
 {
-    if(pInstruction->instruction == AND || pInstruction->instruction == EOR || pInstruction->instruction == SUB || pInstruction->instruction == RSB ||
-            pInstruction->instruction == ADD || pInstruction->instruction == ADC || pInstruction->instruction == SBC || pInstruction->instruction == RSC ||
-            pInstruction->instruction == TST || pInstruction->instruction == TEQ || pInstruction->instruction == CMP || pInstruction->instruction == CMN ||
-            pInstruction->instruction == ORR || pInstruction->instruction == MOV || pInstruction->instruction == LSL || pInstruction->instruction == LSR ||
-            pInstruction->instruction == ASR || pInstruction->instruction == RRX || pInstruction->instruction == ROR || pInstruction->instruction == BIC ||
-            pInstruction->instruction == MVN)
+    if(pInstruction->instrType == AND || pInstruction->instrType == EOR || pInstruction->instrType == SUB || pInstruction->instrType == RSB ||
+            pInstruction->instrType == ADD || pInstruction->instrType == ADC || pInstruction->instrType == SBC || pInstruction->instrType == RSC ||
+            pInstruction->instrType == TST || pInstruction->instrType == TEQ || pInstruction->instrType == CMP || pInstruction->instrType == CMN ||
+            pInstruction->instrType == ORR || pInstruction->instrType == MOV || pInstruction->instrType == LSL || pInstruction->instrType == LSR ||
+            pInstruction->instrType == ASR || pInstruction->instrType == RRX || pInstruction->instrType == ROR || pInstruction->instrType == BIC ||
+            pInstruction->instrType == MVN)
     {
         return compileDataProcessingInstruction(pInstruction);
     }
-    else if(pInstruction->instruction == MUL || pInstruction->instruction == MLA || pInstruction->instruction == UMULL || pInstruction->instruction == UMLAL ||
-            pInstruction->instruction == SMULL || pInstruction->instruction == SMLAL)
+    else if(pInstruction->instrType == MUL || pInstruction->instrType == MLA || pInstruction->instrType == UMULL || pInstruction->instrType == UMLAL ||
+            pInstruction->instrType == SMULL || pInstruction->instrType == SMLAL)
     {
         return compileMultiplyInstruction(pInstruction);
     }
-    else if(pInstruction->instruction == STR || pInstruction->instruction == LDR || pInstruction->instruction == STRB || pInstruction->instruction == LDRB ||
-            pInstruction->instruction == STRH || pInstruction->instruction == LDRH || pInstruction->instruction == LDRSB || pInstruction->instruction == LDRSH)
+    else if(pInstruction->instrType == STR || pInstruction->instrType == LDR || pInstruction->instrType == STRB || pInstruction->instrType == LDRB ||
+            pInstruction->instrType == STRH || pInstruction->instrType == LDRH || pInstruction->instrType == LDRSB || pInstruction->instrType == LDRSH)
     {
         return compileMemoryInstruction(pInstruction);
     }
-    else if(pInstruction->instruction == B || pInstruction->instruction == BL)
+    else if(pInstruction->instrType == B || pInstruction->instrType == BL)
     {
+        //DEBUGGING
+        printf("Branch Inst\n");
+        //DEBUGGING
         return compileBranchInstruction(pInstruction);
     }
     else
@@ -272,9 +308,9 @@ int compileDataProcessingInstruction(Instruction *pInstruction)
     compiledInstruction = (unsigned int)compiledInstruction << 3;
     compiledInstruction = pInstruction->src2Type == IMMEDIATE ? compiledInstruction + 1 : compiledInstruction;
     compiledInstruction = (unsigned int)compiledInstruction << 4;
-    compiledInstruction = compiledInstruction + cmdBinaryCode(pInstruction->instruction);
+    compiledInstruction = compiledInstruction + cmdBinaryCode(pInstruction->instrType);
     compiledInstruction = (unsigned int)compiledInstruction << 1;
-    compiledInstruction = (pInstruction->instruction == TST  ||  pInstruction->instruction == TEQ || pInstruction->instruction == CMP || pInstruction->instruction == CMN) ? compiledInstruction + 1 : compiledInstruction + pInstruction->setFlags;
+    compiledInstruction = (pInstruction->instrType == TST  ||  pInstruction->instrType == TEQ || pInstruction->instrType == CMP || pInstruction->instrType == CMN) ? compiledInstruction + 1 : compiledInstruction + pInstruction->setFlags;
     compiledInstruction = (unsigned int)compiledInstruction << 4;
     compiledInstruction = compiledInstruction + pInstruction->r_n;
     compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -292,27 +328,27 @@ int compileDataProcessingInstruction(Instruction *pInstruction)
         compiledInstruction = (unsigned int)compiledInstruction << 5;
         compiledInstruction = compiledInstruction + pInstruction->imm_shmt;
         compiledInstruction = (unsigned int)compiledInstruction << 2;
-        if(pInstruction->instruction == LSR)
+        if(pInstruction->instrType == LSL)
         {
             compiledInstruction = compiledInstruction + 1;
         }
-        else if(pInstruction->instruction == ASR)
+        else if(pInstruction->instrType == ASR)
         {
             compiledInstruction = compiledInstruction + 2;
         }
-        else if(pInstruction->instruction == RRX)
+        else if(pInstruction->instrType == RRX)
         {
             compiledInstruction = (unsigned int)compiledInstruction >> 7;
             compiledInstruction = (unsigned int)compiledInstruction << 7;
             compiledInstruction = compiledInstruction + 3;
         }
-        else if(pInstruction->instruction == LSR)
+        else if(pInstruction->instrType == LSR)
         {
             compiledInstruction = compiledInstruction + 3;
         }
         else
         {
-            compiledInstruction = compiledInstruction + pInstruction->shift_type;
+            compiledInstruction = compiledInstruction + 0;
         }
         compiledInstruction = (unsigned int)compiledInstruction << 1;
         compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -324,30 +360,30 @@ int compileDataProcessingInstruction(Instruction *pInstruction)
         compiledInstruction = (unsigned int)compiledInstruction << 4;
         compiledInstruction = compiledInstruction + pInstruction->r_sa;
         compiledInstruction = (unsigned int)compiledInstruction << 3;
-        if(pInstruction->instruction == LSR)
+        if(pInstruction->instrType == LSL)
         {
             compiledInstruction = compiledInstruction + 1;
         }
-        else if(pInstruction->instruction == ASR)
+        else if(pInstruction->instrType == ASR)
         {
             compiledInstruction = compiledInstruction + 2;
         }
-        else if(pInstruction->instruction == RRX)
+        else if(pInstruction->instrType == RRX)
         {
             compiledInstruction = (unsigned int)compiledInstruction >> 7;
             compiledInstruction = (unsigned int)compiledInstruction << 7;
             compiledInstruction = compiledInstruction + 3;
         }
-        else if(pInstruction->instruction == LSR)
+        else if(pInstruction->instrType == LSR)
         {
             compiledInstruction = compiledInstruction + 3;
         }
         else
         {
-            compiledInstruction = compiledInstruction + pInstruction->shift_type;
+            compiledInstruction = compiledInstruction + 0;
         }
         compiledInstruction = (unsigned int)compiledInstruction << 1;
-        compiledInstruction = pInstruction->instruction == RRX ? compiledInstruction + 0 : compiledInstruction + 1;
+        compiledInstruction = pInstruction->instrType == RRX ? compiledInstruction + 0 : compiledInstruction + 1;
         compiledInstruction = (unsigned int)compiledInstruction << 4;
         compiledInstruction = compiledInstruction + pInstruction->r_m;
         return compiledInstruction;
@@ -363,9 +399,9 @@ int compileMultiplyInstruction(Instruction *pInstruction)
     int compiledInstruction = 0;
     compiledInstruction = compiledInstruction + conditionalBinaryCode(pInstruction->condition);
     compiledInstruction = (unsigned int)compiledInstruction << 7;
-    compiledInstruction = compiledInstruction + cmdBinaryCode(pInstruction->instruction);
+    compiledInstruction = compiledInstruction + cmdBinaryCode(pInstruction->instrType);
     compiledInstruction = (unsigned int)compiledInstruction << 1;
-    compiledInstruction = (pInstruction->instruction == TST  ||  pInstruction->instruction == TEQ || pInstruction->instruction == CMP || pInstruction->instruction == CMN) ? compiledInstruction + 1 : compiledInstruction + pInstruction->setFlags;
+    compiledInstruction = (pInstruction->instrType == TST  ||  pInstruction->instrType == TEQ || pInstruction->instrType == CMP || pInstruction->instrType == CMN) ? compiledInstruction + 1 : compiledInstruction + pInstruction->setFlags;
     compiledInstruction = (unsigned int)compiledInstruction << 4;
     compiledInstruction = compiledInstruction + pInstruction->r_d;
     compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -383,7 +419,7 @@ int compileMemoryInstruction(Instruction *pInstruction)
 {
     int compiledInstruction = 0;
     compiledInstruction = compiledInstruction + conditionalBinaryCode(pInstruction->condition);
-    if(pInstruction->instruction == STR || pInstruction->instruction == LDR || pInstruction->instruction == STRB || pInstruction->instruction == LDRB)
+    if(pInstruction->instrType == STR || pInstruction->instrType == LDR || pInstruction->instrType == STRB || pInstruction->instrType == LDRB)
     {
         compiledInstruction = (unsigned int)compiledInstruction << 2;
         compiledInstruction = compiledInstruction + 1;
@@ -394,11 +430,11 @@ int compileMemoryInstruction(Instruction *pInstruction)
         compiledInstruction = (unsigned int)compiledInstruction << 1;
         compiledInstruction = pInstruction->addOffset ? compiledInstruction + 1 : compiledInstruction + 0;
         compiledInstruction = (unsigned int)compiledInstruction << 1;
-        compiledInstruction = testMemoryInstruction(pInstruction->instruction, compiledInstruction, 1);
+        compiledInstruction = testMemoryInstruction(pInstruction->instrType, compiledInstruction, 1);
         compiledInstruction = (unsigned int)compiledInstruction << 1;
         compiledInstruction = testIndexMode(pInstruction->indexMode, compiledInstruction, 1);
         compiledInstruction = (unsigned int)compiledInstruction << 1;
-        compiledInstruction = testMemoryInstruction(pInstruction->instruction, compiledInstruction, 0);
+        compiledInstruction = testMemoryInstruction(pInstruction->instrType, compiledInstruction, 0);
         compiledInstruction = (unsigned int)compiledInstruction << 4;
         compiledInstruction = compiledInstruction + pInstruction->r_n;
         compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -433,7 +469,7 @@ int compileMemoryInstruction(Instruction *pInstruction)
         compiledInstruction = (unsigned int)compiledInstruction << 1;
         compiledInstruction = testIndexMode(pInstruction->indexMode, compiledInstruction, 1);
         compiledInstruction = (unsigned int)compiledInstruction << 1;
-        compiledInstruction = testMemoryInstruction(pInstruction->instruction, compiledInstruction, 0);
+        compiledInstruction = testMemoryInstruction(pInstruction->instrType, compiledInstruction, 0);
         compiledInstruction = (unsigned int)compiledInstruction << 4;
         compiledInstruction = compiledInstruction + pInstruction->r_n;
         compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -445,7 +481,7 @@ int compileMemoryInstruction(Instruction *pInstruction)
             compiledInstruction = (unsigned int)compiledInstruction << 1;
             compiledInstruction = compiledInstruction + 1;
             compiledInstruction = (unsigned int)compiledInstruction << 2;
-            compiledInstruction = testOperationTwoInstruction(pInstruction->instruction, compiledInstruction);
+            compiledInstruction = testOperationTwoInstruction(pInstruction->instrType, compiledInstruction);
             compiledInstruction = (unsigned int)compiledInstruction << 1;
             compiledInstruction = compiledInstruction + 1;
             compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -457,7 +493,7 @@ int compileMemoryInstruction(Instruction *pInstruction)
             compiledInstruction = (unsigned int)compiledInstruction << 5;
             compiledInstruction = compiledInstruction + 1;
             compiledInstruction = (unsigned int)compiledInstruction << 2;
-            compiledInstruction = testOperationTwoInstruction(pInstruction->instruction, compiledInstruction);
+            compiledInstruction = testOperationTwoInstruction(pInstruction->instrType, compiledInstruction);
             compiledInstruction = (unsigned int)compiledInstruction << 1;
             compiledInstruction = compiledInstruction + 1;
             compiledInstruction = (unsigned int)compiledInstruction << 4;
@@ -495,7 +531,7 @@ int testMemoryInstruction(int pInstruction, int pValue, int pControlFlag)
 {
     if(pInstruction == STR)
     {
-        return 0;
+        return pValue;
     }
     else if(pInstruction == STRB)
     {
@@ -509,7 +545,7 @@ int testMemoryInstruction(int pInstruction, int pValue, int pControlFlag)
     }
     else if(pInstruction == LDRB)
     {
-        return 1;
+        return pValue + 1;
     }
     else
     {
@@ -521,7 +557,7 @@ int testIndexMode(int pIndexMode, int pValue, int pControlFlag)
 {
     if(pIndexMode == POST_INDEX)
     {
-        return 0;
+        return pValue;
     }
     else if(pIndexMode == OFFSET)
     {
@@ -530,7 +566,7 @@ int testIndexMode(int pIndexMode, int pValue, int pControlFlag)
     }
     else if(pIndexMode == PRE_INDEX)
     {
-        return 1;
+        return pValue + 1;
     }
     else
     {
@@ -547,9 +583,10 @@ int compileBranchInstruction(Instruction *pInstruction)
     compiledInstruction = compiledInstruction + 2;
     compiledInstruction = (unsigned int)compiledInstruction << 1;
     compiledInstruction = compiledInstruction + 1;
-    compiledInstruction = pInstruction->instruction == B ? compiledInstruction + 0 : compiledInstruction + 1;
+    compiledInstruction = (unsigned int)compiledInstruction << 1;
+    compiledInstruction = pInstruction->instrType == B ? compiledInstruction + 0 : compiledInstruction + 1;
     compiledInstruction = (unsigned int)compiledInstruction << 24;
-    int PCPLUSTWO = *(_registers._R15) + 2;
+    int PCPLUSTWO = i + 2;
     int BTA = pInstruction->imm_shmt;
     int immediateBranch = BTA - PCPLUSTWO;
     immediateBranch = (unsigned int)((unsigned int)immediateBranch << 8) >> 8;

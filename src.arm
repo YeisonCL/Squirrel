@@ -1,0 +1,102 @@
+; TECNOLÓGICO DE COSTA RICA
+; INGENIERÍA EN COMPUTADORES
+; ARQUITECTURA DE COMPUTADORES 1
+; AUTOR:  JOSEPH LOAIZA CRUZ
+; CARNET: 201258359
+; 
+; TAREA 1
+; PROBLEMA 1
+
+            B        main
+            
+encrypt_emul
+
+            MOV        R4, #11         ; tamaño de la cadena
+            MOV        R1, #0x320
+            STR        R4, [R1]        ; guardar el largo de la cadena
+
+            MOV        R4, #340        ; clave
+
+            MOV        R1, #0x400
+            STR        R4, [R1], #4    ; guardar la clave
+            
+            MOV        R4, #72         ; H
+            STRB        R4, [R1]
+            MOV        R4, #69            ; E
+            STRB        R4, [R1, #1]!
+            MOV        R4, #76         ; L
+            STRB        R4, [R1, #1]!
+            STRB        R4, [R1, #1]!
+            MOV        R4, #79         ; O
+            STRB        R4, [R1, #1]!
+            MOV        R4, #32         ; ESPACIO
+            STRB        R4, [R1, #1]!
+            MOV        R4, #87         ; W
+            STRB        R4, [R1, #1]!
+            MOV        R4, #79         ; O
+            STRB        R4, [R1, #1]!
+            MOV        R4, #82         ; R
+            STRB        R4, [R1, #1]!
+            MOV        R4, #76         ; L
+            STRB        R4, [R1, #1]!
+            MOV        R4, #68         ; D
+            STRB        R4, [R1, #1]!
+            MOV        PC, LR
+            
+encrypt
+            MOV        R1, #0x320       ; direccion largo cadena
+            LDR        R4, [R1]         ; R4 <- largo cadena
+            CMP        R4, #0             ; verificar si el largo es 0
+            BEQ        encrypt_exit     ; si es 0 entonces terminar
+            ;        sino:
+            MOV        R5, #0             ; contador i <- 0
+
+            MOV        R1, #0x400       ; direccion clave
+            LDR        R6, [R1], #4     ; R6 <- clave, inicio de cadena 0x404 por eso la suma con el inmediato
+            
+encrypt_loop
+            LDRB    R2, [R1, R5]      ; R2 <- caracter
+            ADD        R2, R2, #20     ; caracter + 20
+            EOR        R2, R2, R6        ; XOR clave y caracter
+            STRB    R2, [R1, R5]    ; guardar caracter
+            ADD        R5, R5, #1        ; sumar 1 al indice
+            CMP        R5, R4             ; comparar indice con tamaño total
+            BNE        encrypt_loop
+encrypt_exit
+            MOV        PC, LR
+            
+            ;----------------------------------------------------------------
+            
+decrypt
+            MOV        R1, #0x320       ; direccion largo cadena
+            LDR        R4, [R1]         ; R4 <- largo cadena
+            CMP        R4, #0             ; verificar si el largo es 0
+            BEQ        decrypt_exit     ; si es 0 entonces terminar
+            ;        sino:
+            MOV        R5, #0             ; contador i <- 0
+
+            MOV        R1, #0x400       ; direccion clave
+            LDR        R6, [R1], #4     ; R6 <- clave, inicio de cadena = 0x404 por eso la suma con el inmediato
+    
+decrypt_loop
+            LDRB    R2, [R1, R5]     ; R2 <- caracter
+            EOR        R2, R2, R6        ; XOR clave y caracter
+            SUB        R2, R2, #20     ; caracter - 20
+            STRB    R2, [R1, R5]    ; guardar caracter
+            ADD        R5, R5, #1        ; sumar 1 al indice
+            CMP        R5, R4             ; comparar indice con tamaño total
+            BNE        decrypt_loop
+decrypt_exit
+            MOV        PC, LR
+            
+            ;--------------------------------------------------------------------
+            
+main
+            BL        encrypt_emul
+            BL        encrypt
+            BL        decrypt
+            BL         exit
+
+exit
+            
+

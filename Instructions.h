@@ -1,10 +1,8 @@
 #ifndef INSTRUCTIONS
 #define INSTRUCTIONS
 
-#include <stdlib.h>
-
-struct instruction { 	// Estructura que soporta todos los campos variables de todos los tipos de instrucción
-	int instruction; 	// Especifica el tipo de instrucción, los tipos se obtienen del archivo producido por el parser
+struct instrType { 	// Estructura que soporta todos los campos variables de todos los tipos de instrucción
+    int instrType; 	// Especifica el tipo de instrucción, los tipos se obtienen del archivo producido por el parser
 	int condition; 		// Indica si la instrucción depende de una condición para ejecutarse
 	int setFlags;		// Indica si la instrucción debe hacer set de las banderas del procesador
 	int src2Type; 		// Indica el tipo de Src2
@@ -31,7 +29,7 @@ struct rotInfo { 		// Estructura utilizada en la validación de las instruccione
 	int seed; 			// Indica el valor a rotar
 };
 
-typedef struct instruction Instruction;
+typedef struct instrType Instruction;
 typedef struct rotInfo RotInfo;
 
 // Constantes para condiciones
@@ -86,21 +84,14 @@ extern const int R14;
 extern const int R15; 	
 
 extern const int SP; 	
-extern const int LR; 	
+extern const int LR;
 extern const int PC; 	
 
-// Funciones para validación de datos
-RotInfo *valDataImm(int pImm);
+// Signo
+extern const int POSITIVE_SIGN;
+extern const int NEGATIVE_SIGN;
 
-// Funciones para generar Instruction según los tipos de instrucciones de ARM
-Instruction *dataImmInstr();
-Instruction *dataRegShImmInstr();
-Instruction *dataRegShRegInstr();
-Instruction *multiplyInstr();
-Instruction *memImmInstr();
-Instruction *memRegInstr();
-Instruction *extraMemImmInstr();
-Instruction *extraMemRegInstr();
-Instruction *branchInstr();
+const char *getInstLit(int pInstCode);                                 // Obtiene el texto raiz de la instruccion sin bandera de set ni condicionales. i.e. "ADD", utilizada para encontrar condicionales y bandera de set
+
 
 #endif

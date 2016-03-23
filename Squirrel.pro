@@ -3,14 +3,20 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.c \
+SOURCES += \
     Compiled.c \
     ConditionFlags.c \
     Instructions.c \
     Memory.c \
     Operations.c \
     Registers.c \
-    Simulation.c
+    Simulation.c \
+    ARMYacc.tab.c \
+    InstructionList.c \
+    lex.yy.c \
+    ParserMiscellaneous.c \
+    RefList.c \
+    Symbols.c
 
 HEADERS += \
     ARMYacc.tab.h \
@@ -20,5 +26,9 @@ HEADERS += \
     Memory.h \
     Operations.h \
     Registers.h \
-    Simulation.h
+    Simulation.h \
+    InstructionList.h \
+    ParserMiscellaneous.h \
+    RefList.h \
+    Symbols.h
 

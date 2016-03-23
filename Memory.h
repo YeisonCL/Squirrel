@@ -18,5 +18,6 @@ extern int *_memory;
 void createMemory(); //Crear la memoria que usara ARM.
 void destroyMemory(); //Destruir la memoria que usara ARM.
 void modifyMemory(int pAddress, int pData);
+void resetMemory();
 
 #endif

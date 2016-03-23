@@ -17,6 +17,7 @@
 #include "Operations.h"
 #include "ConditionFlags.h"
 #include "Memory.h"
+#include "ParserMiscellaneous.h"
 #include "ARMYacc.tab.h"
 
 void ANDInstructionAux(Instruction *pInstruction, int *pRd);

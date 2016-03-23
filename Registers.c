@@ -49,6 +49,14 @@ void createAllRegisters() /*Función encargada de asignar memoria para cada uno 
     }
 }
 
+void resetRegisters()
+{
+    for(int i  = 0; i <= 15; i = i + 1)
+    {
+        *(getRegister(i)) = 0;
+    }
+}
+
 void destroyAllRegisters() /*Función encargada de destruir toda la memoria asignada a cada uno de los 15 registros existentes*/
 {
     free(_registers._R0);

@@ -1,0 +1,202 @@
+/*
+* TECNOLÓGICO DE COSTA RICA
+* Ingeniería en Computadores
+* Arquitectura de Computadores 1
+* Proyecto 1.
+* 
+* Descripción: Analizador léxico para ARM
+* 
+* Autores: Cruz Leon, Yeison
+* 		   Loaiza Cruz, Joseph
+*
+* Encargado: Joseph Loaiza Cruz
+*
+*/
+
+%{
+	#include <stdio.h>
+	#include <string.h>
+	#include "ParserMiscellaneous.h"
+	#include "ARMYacc.tab.h"
+%}
+
+%option yylineno
+%option noyywrap
+
+COMENTARY 		;.*
+CONDITIONAL 	(?i:EQ|NE|CS|HS|CC|LO|MI|PL|VS|VC|HI|LS|GE|LT|GT|LE|AL)
+
+HEX 			[+|-]?0[x|X][a-zA-Z0-9]+
+NUMBER			[+|-]?[0-9]+
+
+NEW_LINE 		\n|\r|\n\r
+SPACE 			[ |\t]
+REGISTER		[r|R](1[0-5]+|[0-9])|(?i:PC|LR|SP)
+IDENTIFIER		[a-zA-Z][a-zA-Z0-9_]*
+
+%%
+	/*Los comentarios dentro de esta sección deben ir identados*/
+
+	/*
+	La forma más eficiente encontrada para representar el indicador de set y los condicionales fue la de incluirlos 
+	dentro de la instrucción y dejar la responsabilidad de determinar estos a etapas posteriores, si no se hacía de esta manera 
+	habría que colocar cada posible combinación o serían tomados como tipo identificador
+	*/
+
+(?i:and)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return AND;}
+
+(?i:eor)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return EOR;}
+
+(?i:sub)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return SUB;}
+
+(?i:rsb)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return RSB;}
+
+(?i:add)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return ADD;}
+
+(?i:adc)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return ADC;}
+
+(?i:sbc)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return SBC;}
+
+(?i:rsc)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return RSC;}
+
+(?i:tst){CONDITIONAL}?  			{yylval.literal = (char *) strdup(yytext);
+									return TST;}
+
+(?i:teq){CONDITIONAL}?  			{yylval.literal = (char *) strdup(yytext);
+									return TEQ;}
+
+(?i:cmp){CONDITIONAL}?  			{yylval.literal = (char *) strdup(yytext);
+									return CMP;}
+
+(?i:cmn){CONDITIONAL}?  			{yylval.literal = (char *) strdup(yytext);
+									return CMN;}
+
+(?i:orr)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return ORR;}
+
+(?i:mov)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return MOV;}
+
+(?i:lsl)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return LSL;}
+
+(?i:lsr)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return LSR;}
+
+(?i:asr)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return ASR;}
+
+(?i:rrx)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return RRX;}
+
+(?i:ror)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return ROR;}
+
+(?i:bic)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return BIC;}
+
+(?i:mvn)(?i:s)?{CONDITIONAL}?  		{yylval.literal = (char *) strdup(yytext);
+									return MVN;}
+
+	/*---------------------------- MULTPILICACION ---------------------------------*/
+
+(?i:mul)(?i:s)?{CONDITIONAL}? 		{yylval.literal = (char *) strdup(yytext);
+									return MUL;}
+
+(?i:mla)(?i:s)?{CONDITIONAL}? 		{yylval.literal = (char *) strdup(yytext);
+									return MLA;}
+
+(?i:umull)(?i:s)?{CONDITIONAL}? 	{yylval.literal = (char *) strdup(yytext);
+									return UMULL;}
+
+(?i:umlal)(?i:s)?{CONDITIONAL}? 	{yylval.literal = (char *) strdup(yytext);
+									return UMLAL;}
+
+(?i:smull)(?i:s)?{CONDITIONAL}? 	{yylval.literal = (char *) strdup(yytext);
+									return SMULL;}
+
+(?i:smlal)(?i:s)?{CONDITIONAL}? 	{yylval.literal = (char *) strdup(yytext);
+									return SMLAL;}
+
+	/*---------------------------- MEMORIA ---------------------------------*/
+
+(?i:str){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return STR;}
+
+(?i:ldr){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return LDR;}
+
+(?i:strb){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return STRB;}
+
+(?i:ldrb){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return LDRB;}
+
+(?i:strh){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return STRH;}
+
+(?i:ldrh){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return LDRH;}
+
+(?i:ldrsb){CONDITIONAL}?			{yylval.literal = (char *) strdup(yytext);
+									return LDRSB;}
+
+(?i:ldrsh){CONDITIONAL}?			{yylval.literal = (char *) strdup(yytext);
+									return LDRSH;}
+
+	/*---------------------------- BRANCHES ---------------------------------*/
+
+(?i:b){CONDITIONAL}? 				{yylval.literal = (char *) strdup(yytext);
+									return B;}
+
+(?i:bl){CONDITIONAL}?				{yylval.literal = (char *) strdup(yytext);
+									return BL;}
+
+	/*---------------------------- OTROS ---------------------------------*/
+
+{REGISTER} 							{yylval.literal = (char *) strdup(yytext); 	// Pasar el valor del registro al Parser
+									return REGISTER;} 								// Los valores se pasan como: R1, R2 ... R15, SP, LR, PC
+
+{IDENTIFIER} 						{yylval.literal = (char *) strdup(yytext); 	// Pasar el valor del indentificador al Parser
+									return IDENTIFIER;}
+
+{HEX} 								{yylval.literal = (char *) strdup(yytext); 	// Pasar el valor del HEX al Parser 
+									return HEX;}
+
+{NUMBER} 							{yylval.num = strtol(yytext, NULL, 10);  	// Pasar el numero al Parser
+									return NUMBER;}
+
+"#"									{return '#';}
+
+"+" 								{return '+';}
+"-"									{return '-';}
+"!"									{return '!';}
+"," 								{return ',';}
+"[" 								{return '[';}
+"]" 								{return ']';}
+
+{COMENTARY} 						{}
+{NEW_LINE} 							{return NEW_LINE;}
+{SPACE}								{/*ignore*/}
+
+. 									{yyerror(); printf(" Mistery character '%s'.\n", yytext);}
+
+%%
+
+void yyerror ( char *s )  /* Called by yyparse on error */
+{
+	_errors++;
+	if (s == NULL){
+		printf ("line: %d.", yylineno);
+	} else {
+		printf ("line: %d. %s", yylineno, s);
+	}
+}

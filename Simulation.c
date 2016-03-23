@@ -15,9 +15,9 @@
 #include "Simulation.h"
 #include "Registers.h"
 #include "Memory.h"
+#include "ARMYacc.tab.h"
 #include "Instructions.h"
 #include "ConditionFlags.h"
-#include "ARMYacc.tab.h"
 #include "Operations.h"
 #include "Compiled.h"
 
@@ -42,6 +42,8 @@ void startSimulation() //Método que inicia la simulación.
 {
     printf("Start simulation...\n");
     executeCompilation(COMPILEANDSIMULE);
+    resetMemory();
+    resetRegisters();
     //Ejecutar instruccion
     printf("End simulation...\n");
 }
@@ -232,7 +234,7 @@ int verifyLE()
 
 void verifyInstruction(Instruction *pInstruction)
 {
-    switch (pInstruction->instruction)
+    switch (pInstruction->instrType)
     {
         case AND:
             ANDInstruction(pInstruction);

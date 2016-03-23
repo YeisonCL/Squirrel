@@ -93,14 +93,19 @@ extern int yydebug;
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
+#include "ParserMiscellaneous.h"
+
 union YYSTYPE
 {
-#line 33 "ARMYacc" /* yacc.c:1909  */
+#line 15 "ARMYacc" /* yacc.c:1909  */
  /* SEMANTIC RECORD */
-	char *literal; 	// para los string o literales: REGISTER IDENTIFIER HEX
-	int num;
+	char 				*literal; 	// para los string o literales: REGISTER IDENTIFIER HEX
+	int 				num;
+	struct instruction 	*inst;
+	struct instWrap 	instWrap;
+	struct src2wrap 	src2wrap;
 
-#line 104 "ARMYacc.tab.h" /* yacc.c:1909  */
+#line 107 "ARMYacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

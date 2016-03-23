@@ -18,4 +18,6 @@ extern int _zero;
 extern int _carry;
 extern int _overflow;
 
+void printFlags();
+
 #endif

@@ -43,7 +43,7 @@ void startSimulation() //Método que inicia la simulación.
 {
     createMemory();
     createAllRegisters();
-    printf("Start simulation...\n");
+    printf("\nStart simulation...\n");
     //executeCompilation(COMPILEANDSIMULE);
     resetMemory();
     resetRegisters();
@@ -52,10 +52,13 @@ void startSimulation() //Método que inicia la simulación.
     {
         //DEBUGGING
         printf("\n\n--------------------------------------------------\n");
+        printf("Instruccion: %d\n", *(_registers._R15));
         printf("\nRegistros PRE-Instruccion\n");
         printRegisters();
         printf("\nMemoria PRE-Instruccion\n");
         printDataMemory();
+        printf("\nFlags PRE-Instruction\n");
+        printFlags();
         //DEBUGGING
         int oldPC = *(_registers._R15);
         executeInstruction(getInstruction(*(_registers._R15)));
@@ -65,9 +68,11 @@ void startSimulation() //Método que inicia la simulación.
         printRegisters();
         printf("\nMemoria POST-Instruccion\n");
         printDataMemory();
+        printf("\nFlags POST-Instruction\n");
+        printFlags();
         //DEBUGGING
     }
-    printf("End simulation...\n");
+    printf("\nEnd simulation...\n");
 }
 
 void executeInstruction(Instruction *pInstruction)

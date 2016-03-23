@@ -55,7 +55,7 @@ void printDataMemory()
 {
     for(int i = 256; i <= 511; i = i +1)
     {
-        printf("%d: %d \t", i, _memory[i]);
+        printf("%d: %d \t", i * 4, _memory[i]);
     }
 }
 

@@ -10,9 +10,18 @@
 /*             201258359                     */
 /*********************************************/
 
+#include <stdio.h>
+
 #include "ConditionFlags.h"
 
 int _negative = 0;
 int _zero = 0;
 int _carry = 0;
 int _overflow = 0;
+
+//DEBUGGING
+void printFlags()
+{
+    printf("Negative: %d Zero: %d Carry: %d Overflow: %d", _negative, _zero, _carry, _overflow);
+}
+//DEBUGGING

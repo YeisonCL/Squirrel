@@ -12,6 +12,7 @@
 
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "Registers.h"
 #include "Operations.h"
@@ -557,38 +558,42 @@ void RSCInstruction(Instruction *pInstruction)
 
 void TSTInstruction(Instruction *pInstruction)
 {
-    int *result = 0;
+    int *result = (int*) calloc(1, sizeof (int));
     ANDInstructionAux(pInstruction, result);
     _carry = 0;
     _zero = result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
+    free(result);
 }
 
 void TEQInstruction(Instruction *pInstruction)
 {
-    int *result = 0;
+    int *result = (int*) calloc(1, sizeof (int));
     EORInstructionAux(pInstruction, result);
     _carry = 0;
     _zero = result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
+    free(result);
 }
 
 void CMPInstruction(Instruction *pInstruction)
 {
-    int *result = 0;
+    int *result = (int*) calloc(1, sizeof (int));
     pInstruction->setFlags = 1;
     SUBInstructionAux(pInstruction, result);
     _zero = *result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
+    free(result);
 }
 
 void CMNInstruction(Instruction *pInstruction)
 {
-    int *result = 0;
+    int *result = (int*) calloc(1, sizeof (int));
     pInstruction->setFlags = 1;
     ADDInstructionAux(pInstruction, result);
     _zero = *result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
+    free(result);
 }
 
 /*End Set flags default*/
@@ -1441,18 +1446,18 @@ void STRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1466,18 +1471,18 @@ void STRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1491,18 +1496,18 @@ void STRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1517,18 +1522,18 @@ void STRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1544,18 +1549,18 @@ void STRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned char)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1582,18 +1587,18 @@ void LDRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {                        
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1607,18 +1612,18 @@ void LDRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1632,18 +1637,18 @@ void LDRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1658,18 +1663,18 @@ void LDRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1685,18 +1690,18 @@ void LDRBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+address/4 + address%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned char *memInByte = (unsigned char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1723,18 +1728,18 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1748,18 +1753,18 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1773,18 +1778,18 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1799,18 +1804,18 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1826,18 +1831,18 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1864,18 +1869,18 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1889,18 +1894,18 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1914,18 +1919,18 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1940,18 +1945,18 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -1967,18 +1972,18 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+address/4 + address%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2005,18 +2010,18 @@ void LDRSBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            char *memInByte = (char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2030,18 +2035,18 @@ void LDRSBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            char *memInByte = (char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2055,18 +2060,18 @@ void LDRSBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            char *memInByte = (char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2081,18 +2086,18 @@ void LDRSBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            char *memInByte = (char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2108,18 +2113,18 @@ void LDRSBInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            char *memInByte = (char *)(_memory+address/4 + address%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            char *memInByte = (char *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            char *memInByte = (char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2146,18 +2151,18 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2171,18 +2176,18 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2196,18 +2201,18 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2222,18 +2227,18 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
@@ -2249,18 +2254,18 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)(_memory+address/4 + address%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)(_memory+*getRegister(pInstruction->r_n)/4 + *getRegister(pInstruction->r_n)%4);
+            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
         }

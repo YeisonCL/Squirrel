@@ -20,4 +20,9 @@ void destroyMemory(); //Destruir la memoria que usara ARM.
 void modifyMemory(int pAddress, int pData);
 void resetMemory();
 
+
+//DEBUGGING
+void printDataMemory();
+//DEBUGGING
+
 #endif

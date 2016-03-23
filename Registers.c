@@ -154,3 +154,13 @@ void modifyRegister(int pRegister, int pData)
 {
     *(getRegister(pRegister)) = pData;
 }
+
+//DEBUGGING
+void printRegisters()
+{
+    for(int i  = 0; i <= 15; i = i + 1)
+    {
+        printf("R%d: %d\t", i, *(getRegister(i)));
+    }
+}
+//DEBUGGING

@@ -69,6 +69,7 @@
 	#include "Instructions.h"
 	#include "InstructionList.h"
 	#include "Compiled.h"
+    #include "Simulation.h"
 	#include <stdio.h>
 
 	#define YYDEBUG 1	
@@ -1376,8 +1377,8 @@ yyreduce:
 
   case 15:
 #line 62 "ARMYacc" /* yacc.c:1646  */
-    { int rn = 0;
-																				int rd = getRegConstant((yyvsp[-2].literal));
+    { int rn = getRegConstant((yyvsp[-2].literal));
+																				int rd = 0;
 																				dataInstr((yyvsp[-3].instWrap), rn, rd, (yyvsp[0].src2wrap));}
 #line 1383 "ARMYacc.tab.c" /* yacc.c:1646  */
     break;
@@ -2146,8 +2147,9 @@ int main(void)
     completeContext();
     printf ( "Parse Completed. %d errors where found.\n", _errors);
     if (_errors == 0){
-    	//printInstructionList();
-    	executeCompilation(0);
+        printInstructionList();
+        //executeCompilation(0);
+        startSimulation();
     } 
     /*if ( errors == 0 ) {
         print_code ();

@@ -59,8 +59,8 @@ data_instruction	: data_nmonic_d 	REGISTER ',' REGISTER ',' data_src2		{ int rn 
 																				int rd = getRegConstant($2);
 																				dataInstr($1, rn, rd, $6);}
 					// NMC Rn, src2
-					| data_nmonic_nod 	REGISTER ',' data_src2					{ int rn = 0;
-																				int rd = getRegConstant($2);
+					| data_nmonic_nod 	REGISTER ',' data_src2					{ int rn = getRegConstant($2);
+																				int rd = 0;
 																				dataInstr($1, rn, rd, $4);}
 					;
 

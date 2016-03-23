@@ -20,6 +20,7 @@
 #include "ConditionFlags.h"
 #include "Operations.h"
 #include "Compiled.h"
+#include "InstructionList.h"
 
 void executeInstruction(Instruction *pInstruction); //Método encargado de ejecutar una instrucción.
 void verifyInstruction(Instruction *pInstruction);
@@ -40,11 +41,32 @@ int verifyLE();
 
 void startSimulation() //Método que inicia la simulación.
 {
+    createMemory();
+    createAllRegisters();
     printf("Start simulation...\n");
-    executeCompilation(COMPILEANDSIMULE);
+    //executeCompilation(COMPILEANDSIMULE);
     resetMemory();
     resetRegisters();
-    //Ejecutar instruccion
+    int totalInstructions = getLastInstruction();
+    while(*(_registers._R15) <= totalInstructions)
+    {
+        //DEBUGGING
+        printf("\n\n--------------------------------------------------\n");
+        printf("\nRegistros PRE-Instruccion\n");
+        printRegisters();
+        printf("\nMemoria PRE-Instruccion\n");
+        printDataMemory();
+        //DEBUGGING
+        int oldPC = *(_registers._R15);
+        executeInstruction(getInstruction(*(_registers._R15)));
+        *(_registers._R15) = oldPC == *(_registers._R15) ? *(_registers._R15) + 1 : *(_registers._R15);
+        //DEBUGGING
+        printf("\nRegistros POST-Instruccion\n");
+        printRegisters();
+        printf("\nMemoria POST-Instruccion\n");
+        printDataMemory();
+        //DEBUGGING
+    }
     printf("End simulation...\n");
 }
 

@@ -41,4 +41,8 @@ void modifyRegister(int pRegister, int pData);
 int *getRegister(int pRegister);
 void resetRegisters();
 
+//DEBUGGING
+void printRegisters();
+//DEBUGGING
+
 #endif

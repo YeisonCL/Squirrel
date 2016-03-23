@@ -316,7 +316,7 @@ Instruction *memRegInstr(int pInstruction, const char *pSourceInst, int pAddOffs
     int cond = getInstConditional(pSourceInst, instRoot);
 
     // Definir las variables necesarias
-    inst->src2Type 		= REG_REG; 			// se trata de una instruccion con registros
+    inst->src2Type 		= REG_IMM; 			// se trata de una instruccion con registros
     inst->condition 	= cond;
     inst->addOffset 	= pAddOffset;
     inst->indexMode 	= pIndexMode;
@@ -356,7 +356,7 @@ Instruction *extraMemRegInstr(int pInstruction, const char *pSourceInst, int pAd
     int cond = getInstConditional(pSourceInst, instRoot);
 
     // Definir las variables necesarias
-    inst->src2Type 		= REG_REG; 			// se trata de una instruccion con registros
+    inst->src2Type 		= REG_IMM; 			// se trata de una instruccion con registros
     inst->condition 	= cond;
     inst->addOffset 	= pAddOffset;
     inst->indexMode 	= pIndexMode;

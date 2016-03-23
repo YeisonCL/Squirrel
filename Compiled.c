@@ -196,19 +196,9 @@ void executeCompilation(int pTypeCompilation)
     printf("Start compilation...\n");
     verifyTypeCompilation(pTypeCompilation, START);
     int totalInstructions = getLastInstruction();
-    //DEBUGGING
-    printf("%d\n", totalInstructions);
-    //DEBUGGING
     for(i = 0; i <= totalInstructions; i = i + 1)
     {
-        Instruction *test = getInstruction(i);
-        //DEBUGGING
-        printf("Compilando instruccion: %d\n", test);
-        //DEBUGGING
-        int compiledInstruction = compileInstruction(test);
-        //DEBUGGING
-        printf("Instruccion compilada: %u\n", compiledInstruction);
-        //DEBUGGING
+        int compiledInstruction = compileInstruction(getInstruction(i));
         saveCompiledInstruction(pTypeCompilation, compiledInstruction, i);
     }
     verifyTypeCompilation(pTypeCompilation, END);
@@ -290,9 +280,6 @@ int compileInstruction(Instruction *pInstruction)
     }
     else if(pInstruction->instrType == B || pInstruction->instrType == BL)
     {
-        //DEBUGGING
-        printf("Branch Inst\n");
-        //DEBUGGING
         return compileBranchInstruction(pInstruction);
     }
     else
@@ -348,10 +335,24 @@ int compileDataProcessingInstruction(Instruction *pInstruction)
         }
         else
         {
-            compiledInstruction = compiledInstruction + 0;
+            if(pInstruction->shift_type == LSR)
+            {
+                compiledInstruction = compiledInstruction + 1;
+            }
+            else if(pInstruction->shift_type == ASR)
+            {
+                compiledInstruction = compiledInstruction + 2;
+            }
+            else if(pInstruction->shift_type == ROR)
+            {
+                compiledInstruction = compiledInstruction + 3;
+            }
+            else
+            {
+                compiledInstruction = compiledInstruction + 0;
+            }
         }
-        compiledInstruction = (unsigned int)compiledInstruction << 1;
-        compiledInstruction = (unsigned int)compiledInstruction << 4;
+        compiledInstruction = (unsigned int)compiledInstruction << 5;
         compiledInstruction = compiledInstruction + pInstruction->r_m;
         return compiledInstruction;
     }
@@ -380,7 +381,22 @@ int compileDataProcessingInstruction(Instruction *pInstruction)
         }
         else
         {
-            compiledInstruction = compiledInstruction + 0;
+            if(pInstruction->shift_type == LSR)
+            {
+                compiledInstruction = compiledInstruction + 1;
+            }
+            else if(pInstruction->shift_type == ASR)
+            {
+                compiledInstruction = compiledInstruction + 2;
+            }
+            else if(pInstruction->shift_type == ROR)
+            {
+                compiledInstruction = compiledInstruction + 3;
+            }
+            else
+            {
+                compiledInstruction = compiledInstruction + 0;
+            }
         }
         compiledInstruction = (unsigned int)compiledInstruction << 1;
         compiledInstruction = pInstruction->instrType == RRX ? compiledInstruction + 0 : compiledInstruction + 1;
@@ -450,7 +466,22 @@ int compileMemoryInstruction(Instruction *pInstruction)
             compiledInstruction = (unsigned int)compiledInstruction << 5;
             compiledInstruction = compiledInstruction + pInstruction->imm_shmt;
             compiledInstruction = (unsigned int)compiledInstruction << 2;
-            compiledInstruction = compiledInstruction + pInstruction->shift_type;
+            if(pInstruction->shift_type == LSR)
+            {
+                compiledInstruction = compiledInstruction + 1;
+            }
+            else if(pInstruction->shift_type == ASR)
+            {
+                compiledInstruction = compiledInstruction + 2;
+            }
+            else if(pInstruction->shift_type == ROR)
+            {
+                compiledInstruction = compiledInstruction + 3;
+            }
+            else
+            {
+                compiledInstruction = compiledInstruction + 0;
+            }
             compiledInstruction = (unsigned int)compiledInstruction << 1;
             compiledInstruction = compiledInstruction + 1;
             compiledInstruction = (unsigned int)compiledInstruction << 4;

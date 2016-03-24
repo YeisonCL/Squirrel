@@ -70,7 +70,7 @@ void verifyCarryAndOverflowSUB(int pSetFlags, unsigned int pOperatorOne, unsigne
 {
     if(pSetFlags)
     {
-        unsigned long long detectCarry = (unsigned long long)pOperatorOne - (unsigned long long)pOperatorTwo;
+        unsigned long long detectCarry = (unsigned long long)pOperatorOne + (unsigned long long)(~pOperatorTwo + 1);
         _carry = detectCarry >> 32 == 0 ? 0 : 1;
         int conditionOne = (unsigned int)detectCarry >> 31 != (unsigned int)pOperatorOne >> 31 ? 1 : 0;
         int conditionTwo = (unsigned int)pOperatorOne >> 31 != (unsigned int)pOperatorTwo >> 31 ? 1 : 0;

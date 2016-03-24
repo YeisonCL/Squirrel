@@ -70,6 +70,7 @@ void startSimulation() //Método que inicia la simulación.
         printDataMemory();
         printf("\nFlags POST-Instruction\n");
         printFlags();
+        getchar();
         //DEBUGGING
     }
     printf("\nEnd simulation...\n");

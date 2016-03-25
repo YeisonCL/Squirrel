@@ -15,6 +15,7 @@
 
 #include "Registers.h"
 #include "Instructions.h"
+#include "Facade.h"
 
 Registers _registers;
 
@@ -40,12 +41,14 @@ void createAllRegisters() /*Función encargada de asignar memoria para cada uno 
             _registers._R6 == NULL || _registers._R7 == NULL || _registers._R8 == NULL || _registers._R9 == NULL || _registers._R10 == NULL || _registers._R11 == NULL ||
             _registers._R12 == NULL || _registers._R13 == NULL || _registers._R14 == NULL || _registers._R15 == NULL)
     {
-        printf("Could not allocate memory for some register.\n");
+        printf("\nCould not allocate memory for some register.\n");
+        updateConsole();
         exit(-1);
     }
     else
     {
-        printf("Memory allocated successfully for all registers.\n");
+        printf("\nMemory allocated successfully for all registers.\n");
+        updateConsole();
     }
 }
 
@@ -75,7 +78,8 @@ void destroyAllRegisters() /*Función encargada de destruir toda la memoria asig
     free(_registers._R13);
     free(_registers._R14);
     free(_registers._R15);
-     printf("Memory free successfully for all registers.\n");
+    printf("\nMemory free successfully for all registers.\n");
+    updateConsole();
 }
 
 int *getRegister(int pRegister)

@@ -10,18 +10,15 @@
 /*             201258359                     */
 /*********************************************/
 
-#ifndef _CONDITIONFLAGS_H
-#define _CONDITIONFLAGS_H
+#ifndef _CONFIGURATION_H
+#define _CONFIGURATION_H
 
-extern int _negative;
-extern int _zero;
-extern int _carry;
-extern int _overflow;
+extern char *_newSTDOUT;
+extern int _memorySize;
 
-void resetFlags();
-
-//DEBUGGING
-void printFlags();
-//DEBUGGIN
+void createNewSTDOUT();
+void destroyNewSTDOUT();
+void redirectSTDOUT();
+void cleanBuffer(char *pBuffer);
 
 #endif

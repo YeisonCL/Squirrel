@@ -21,6 +21,7 @@
 #include "Operations.h"
 #include "Compiled.h"
 #include "InstructionList.h"
+#include "Facade.h"
 
 void executeInstruction(Instruction *pInstruction); //Método encargado de ejecutar una instrucción.
 void verifyInstruction(Instruction *pInstruction);
@@ -41,16 +42,17 @@ int verifyLE();
 
 void startSimulation() //Método que inicia la simulación.
 {
-    createMemory();
-    createAllRegisters();
+    executeCompilation(COMPILEANDSIMULE);
     printf("\nStart simulation...\n");
-    //executeCompilation(COMPILEANDSIMULE);
+    updateConsole();
     resetMemory();
     resetRegisters();
+    resetFlags();
     int totalInstructions = getLastInstruction();
     while(*(_registers._R15) <= totalInstructions)
     {
         //DEBUGGING
+        /*
         printf("\n\n--------------------------------------------------\n");
         printf("Instruccion: %d\n", *(_registers._R15));
         printf("\nRegistros PRE-Instruccion\n");
@@ -59,11 +61,15 @@ void startSimulation() //Método que inicia la simulación.
         printDataMemory();
         printf("\nFlags PRE-Instruction\n");
         printFlags();
+        */
         //DEBUGGING
         int oldPC = *(_registers._R15);
         executeInstruction(getInstruction(*(_registers._R15)));
         *(_registers._R15) = oldPC == *(_registers._R15) ? *(_registers._R15) + 1 : *(_registers._R15);
+        updateFlags();
+        updateRegisters();
         //DEBUGGING
+        /*
         printf("\nRegistros POST-Instruccion\n");
         printRegisters();
         printf("\nMemoria POST-Instruccion\n");
@@ -71,9 +77,11 @@ void startSimulation() //Método que inicia la simulación.
         printf("\nFlags POST-Instruction\n");
         printFlags();
         getchar();
+        */
         //DEBUGGING
     }
     printf("\nEnd simulation...\n");
+    updateConsole();
 }
 
 void executeInstruction(Instruction *pInstruction)

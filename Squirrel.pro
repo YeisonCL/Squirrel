@@ -16,7 +16,10 @@ SOURCES += \
     lex.yy.c \
     ParserMiscellaneous.c \
     RefList.c \
-    Symbols.c
+    Symbols.c \
+    Facade.c \
+    Configuration.c \
+    main.c
 
 HEADERS += \
     ARMYacc.tab.h \
@@ -30,5 +33,7 @@ HEADERS += \
     InstructionList.h \
     ParserMiscellaneous.h \
     RefList.h \
-    Symbols.h
+    Symbols.h \
+    Facade.h \
+    Configuration.h
 

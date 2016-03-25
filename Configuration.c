@@ -10,26 +10,38 @@
 /*             201258359                     */
 /*********************************************/
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
-#include "ConditionFlags.h"
+#include "Configuration.h"
 
-int _negative = 0;
-int _zero = 0;
-int _carry = 0;
-int _overflow = 0;
+char *_newSTDOUT;
+int _memorySize = 0;
 
-void resetFlags()
+void createNewSTDOUT()
 {
-    _negative = 0;
-    _zero = 0;
-    _carry = 0;
-    _overflow = 0;
+    _newSTDOUT = (char*)calloc(65536, sizeof(char));
 }
 
-//DEBUGGING
-void printFlags()
+void destroyNewSTDOUT()
 {
-    printf("Negative: %d Zero: %d Carry: %d Overflow: %d", _negative, _zero, _carry, _overflow);
+    free(_newSTDOUT);
 }
-//DEBUGGING
+
+void redirectSTDOUT()
+{
+    freopen("/dev/null", "a", stdout);
+    setbuf(stdout, _newSTDOUT);
+}
+
+void cleanBuffer(char *pBuffer)
+{
+    int sizeBuffer = strlen(pBuffer);
+    int i = 0;
+    while(*(pBuffer + i) != 0 && i != sizeBuffer)
+    {
+        *(pBuffer + i) = 0;
+        i = i + 1;
+    }
+}

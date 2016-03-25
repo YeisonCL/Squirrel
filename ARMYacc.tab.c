@@ -58,9 +58,6 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-
-
-
 /* Copy the first part of user declarations.  */
 #line 1 "ARMYacc" /* yacc.c:339  */
 
@@ -2132,29 +2129,19 @@ yyreturn:
 #line 371 "ARMYacc" /* yacc.c:1906  */
 
 
-int main(void)
+int executeParser(const char* pFileDirection)
 {
     extern FILE *yyin;
-    yyin = fopen( "/root/Desktop/Squirrel/src.arm", "r" );
+    yyin = fopen(pFileDirection, "r" );
     if (yyin == 0) {
-    	printf("Error. Can't open the file. Please check it.\n");
-    	return 1;
-    } 
+        printf("Error. Can't open the file \" %s \". Please check it.\n", pFileDirection);
+        return 1;
+    }
     /*yydebug = 1;*/
     _errors = 0;
     createInstList(100);
     yyparse ();
     completeContext();
     printf ( "Parse Completed. %d errors where found.\n", _errors);
-    if (_errors == 0){
-        printInstructionList();
-        //executeCompilation(0);
-        startSimulation();
-    } 
-    /*if ( errors == 0 ) {
-        print_code ();
-        fetch_execute_cycle();
-    }*/
-
-    return 0;
+    return _errors;
 }

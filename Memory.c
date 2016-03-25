@@ -14,27 +14,56 @@
 #include <stdlib.h>
 
 #include "Memory.h"
+#include "Facade.h"
+#include "Configuration.h"
 
 int *_memory;
+
+void createNewMemory()
+{
+    if(_memorySize > 512)
+    {
+        free(_memory);
+        _memory = (int*) calloc(_memorySize, sizeof (int));
+        if (_memory == NULL)
+        {
+            printf("\nCould not allocate new data memory.\n");
+            updateConsole();
+            exit(-1);
+        }
+        else
+        {
+            printf("\nNew data memory allocated successfully.\n");
+            updateConsole();
+        }
+    }
+    else
+    {
+        ;
+    }
+}
 
 void createMemory() //Crear la memoria que usara ARM.
 {
     _memory = (int*) calloc(512, sizeof (int));
     if (_memory == NULL)
     {
-        printf("Could not allocate data memory.\n");
+        printf("\nCould not allocate data memory.\n");
+        updateConsole();
         exit(-1);
     }
     else
     {
-        printf("Data memory allocated successfully.\n");
+        printf("\nData memory allocated successfully.\n");
+        updateConsole();
     }
 }
 
 void destroyMemory() //Destruir la memoria que usara ARM.
 {
     free(_memory);
-    printf("Data memory free successfully.\n");
+    printf("\nData memory free successfully.\n");
+    updateConsole();
 }
 
 void modifyMemory(int pAddress, int pData)

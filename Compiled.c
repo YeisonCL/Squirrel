@@ -23,6 +23,7 @@
 #include "ParserMiscellaneous.h"
 #include "ARMYacc.tab.h"
 #include "InstructionList.h"
+#include "Facade.h"
 
 const int COMPILE = 0;
 const int COMPILEANDSIMULE = 1;
@@ -193,7 +194,8 @@ void executeCompilation(int pTypeCompilation)
     //pTypeCompilation == COMPILE -> Solo modo de compilacion (generación de archivo).
     //pTypeCompilation == COMPILEANDSIMULE -> Modo de compilación + simulación (no generación de archivo, guardado en memoria).
 
-    printf("Start compilation...\n");
+    printf("\nStart compilation...\n");
+    updateConsole();
     verifyTypeCompilation(pTypeCompilation, START);
     int totalInstructions = getLastInstruction();
     for(i = 0; i <= totalInstructions; i = i + 1)
@@ -202,7 +204,8 @@ void executeCompilation(int pTypeCompilation)
         saveCompiledInstruction(pTypeCompilation, compiledInstruction, i);
     }
     verifyTypeCompilation(pTypeCompilation, END);
-    printf("End compilation...\n");
+    printf("\nEnd compilation...\n");
+    updateConsole();
 }
 
 void verifyTypeCompilation(int pTypeCompilation, int pControlFlag)

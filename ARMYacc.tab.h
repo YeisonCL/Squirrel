@@ -118,4 +118,6 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
+int executeParser(const char* pFileDirection);
+
 #endif /* !YY_YY_ARMYACC_TAB_H_INCLUDED  */

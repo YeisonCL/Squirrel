@@ -15,6 +15,7 @@
 
 extern int *_memory;
 
+void createNewMemory(); //Metodo que crea nueva memoria con nuevo espacio.
 void createMemory(); //Crear la memoria que usara ARM.
 void destroyMemory(); //Destruir la memoria que usara ARM.
 void modifyMemory(int pAddress, int pData);

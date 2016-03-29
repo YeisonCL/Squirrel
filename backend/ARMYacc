@@ -1,0 +1,397 @@
+%{
+	// CODIGO LITERAL ACA
+	#include "ParserMiscellaneous.h"
+	#include "Instructions.h"
+	#include "InstructionList.h"
+	#include "Compiled.h"
+	#include <stdio.h>
+
+	#define YYDEBUG 1	
+
+	extern char *yytext;
+	extern int yylineno;
+%}
+
+%union { /* SEMANTIC RECORD */
+	char 				*literal; 	// para los string o literales: REGISTER IDENTIFIER HEX
+	int 				num;
+	struct instruction 	*inst;
+	struct instWrap 	instWrap;
+	struct src2wrap 	src2wrap;
+}
+
+%start expressions
+
+%token NEW_LINE 
+%token <literal> IDENTIFIER MOV AND EOR SUB RSB ADD ADC SBC RSC TST TEQ ORR BIC MVN CMP CMN LSL LSR ASR RRX ROR MUL MLA UMULL UMLAL SMULL SMLAL STR LDR STRB LDRB STRH LDRH LDRSB LDRSH B BL 
+%token <literal> REGISTER
+%token <literal> HEX
+%token <num> NUMBER
+%token ',' '#' '+' '-' '[' ']' '!'
+
+%type <src2wrap> data_src2 mem_src2
+%type <instWrap> data_nmonic_d data_nmonic_nod shift_nmonic mul_nmonic mem_nmonic branch_nmonic
+%type <num> numerical preindex sign
+%%
+
+expressions			: expressions NEW_LINE expression 
+					| expression 							
+					;
+
+expression 			: label
+					| label instruction
+					| error 			{printf("Expression bad formed, \"%s\" was not expected.\n", yytext); yyclearin;}
+					;
+
+label				: IDENTIFIER 		{installSymb($1);}
+					| /* empty */
+					;
+
+instruction 		: data_instruction 
+					| shift_instruction
+					| mul_instruction 
+					| mem_instruction 
+					| branch_instruction 
+					;
+
+				   	// NMC Rd, Rn, src2
+data_instruction	: data_nmonic_d 	REGISTER ',' REGISTER ',' data_src2		{ int rn = getRegConstant($4);
+																				int rd = getRegConstant($2);
+																				dataInstr($1, rn, rd, $6);}
+					// NMC Rn, src2
+					| data_nmonic_nod 	REGISTER ',' data_src2					{ int rn = getRegConstant($2);
+																				int rd = 0;
+																				dataInstr($1, rn, rd, $4);}
+					;
+
+					// MOV Rd, src2
+shift_instruction 	: MOV 				REGISTER ',' data_src2					{ InstWrap inst;
+																				inst.instrCode = MOV;
+																				inst.instSource = $1;
+																				int rn = 0;
+																				int rd = getRegConstant($2);
+																				dataInstr(inst, rn, rd, $4);}
+					// LSL Rd, Rm, Rs
+					| shift_nmonic 		REGISTER ',' REGISTER ',' REGISTER 		{ int rn = 0;
+																				int rd = getRegConstant($2);
+																				int rm = getRegConstant($4);
+																				int rs = getRegConstant($6);
+																				dataRegShRegInstr($1.instrCode, $1.instSource, rn, rd, rs, $1.instrCode, rm);}
+					// LSL Rd, Rm, #NUM
+					| shift_nmonic 		REGISTER ',' REGISTER ',' numerical  	{ int rn = 0;
+																				int rd = getRegConstant($2);
+																				int rm = getRegConstant($4);
+																				dataRegShImmInstr($1.instrCode, $1.instSource, rn, rd, $6, $1.instrCode, rm);}
+					;
+
+data_src2			: REGISTER 								{Src2Wrap wrap; 
+															wrap.srcType = REG_IMM; 
+															wrap.rm = getRegConstant($1);
+															wrap.imm_shmt = 0;
+															wrap.shiftType = LSL;
+															$$ = wrap;}
+
+					| numerical								{Src2Wrap wrap; 
+															wrap.srcType = IMMEDIATE; 
+															wrap.imm_shmt = $1;
+															$$ = wrap;}
+
+					| REGISTER ',' shift_nmonic numerical 	{Src2Wrap wrap; 
+															wrap.srcType = REG_IMM; 
+															wrap.rm = getRegConstant($1);
+															wrap.imm_shmt = $4;
+															wrap.shiftType = $3.instrCode;
+															$$ = wrap;}
+
+					| REGISTER ',' shift_nmonic REGISTER	{Src2Wrap wrap; 
+															wrap.srcType = REG_REG; 
+															wrap.rm = getRegConstant($1);
+															wrap.rs = getRegConstant($4);
+															wrap.shiftType = $3.instrCode;
+															$$ = wrap;}
+					;
+
+numerical 			: '#' NUMBER 							{$$ = $2;}
+					| '#' HEX								{$$ = hex2dec($2);}
+					;
+
+sign				: '+' 									{$$ = POSITIVE_SIGN;}
+					| '-'									{$$ = NEGATIVE_SIGN;}
+					| /* empty */ 							{$$ = POSITIVE_SIGN;}
+					;
+
+	// Instrucciones que tienen registro destino
+data_nmonic_d 		: AND   	{InstWrap inst;
+								inst.instrCode = AND;
+								inst.instSource = $1;
+								$$ = inst;}
+
+					| EOR 		{InstWrap inst;
+								inst.instrCode = EOR;
+								inst.instSource = $1;
+								$$ = inst;}
+
+					| SUB 		{InstWrap inst;
+								inst.instrCode = SUB;
+								inst.instSource = $1;
+								$$ = inst;}
+
+					| RSB 		{InstWrap inst;
+								inst.instrCode = RSB;
+								inst.instSource = $1;
+								$$ = inst;}
+
+					| ADD 		{InstWrap inst;
+								inst.instrCode = ADD;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| ADC 		{InstWrap inst;
+								inst.instrCode = ADC;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| SBC 		{InstWrap inst;
+								inst.instrCode = SBC;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| RSC 		{InstWrap inst;
+								inst.instrCode = RSC;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| TST 		{InstWrap inst;
+								inst.instrCode = TST;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| TEQ 		{InstWrap inst;
+								inst.instrCode = TEQ;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| ORR 		{InstWrap inst;
+								inst.instrCode = ORR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| BIC 		{InstWrap inst;
+								inst.instrCode = BIC;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| MVN 		{InstWrap inst;
+								inst.instrCode = MVN;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+data_nmonic_nod     : CMP 		{InstWrap inst;
+								inst.instrCode = CMP;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| CMN		{InstWrap inst;
+								inst.instrCode = CMN;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+shift_nmonic 		: LSL 		{InstWrap inst;
+								inst.instrCode = LSL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LSR 		{InstWrap inst;
+								inst.instrCode = LSR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| ASR 		{InstWrap inst;
+								inst.instrCode = ASR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| RRX 		{InstWrap inst;
+								inst.instrCode = RRX;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| ROR		{InstWrap inst;
+								inst.instrCode = ROR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+mul_instruction 	: MUL 		REGISTER ',' REGISTER ',' REGISTER 						{ int rd = getRegConstant($2);
+																						int rn = getRegConstant($4);
+																						int rm = getRegConstant($6);
+																						int ra = 0;
+																						multiplyInstr(MUL, $1, rd, ra, rm, rn);}
+
+					| mul_nmonic 	REGISTER ',' REGISTER ',' REGISTER ',' REGISTER  	{ int rd = getRegConstant($2);
+																						int rn = getRegConstant($4);
+																						int rm = getRegConstant($6);
+																						int ra = getRegConstant($8);
+																						multiplyInstr($1.instrCode, $1.instSource, rd, ra, rm, rn);}
+					;
+
+mul_nmonic			: MLA 		{InstWrap inst;
+								inst.instrCode = MLA;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| UMULL 	{InstWrap inst;
+								inst.instrCode = UMULL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| UMLAL 	{InstWrap inst;
+								inst.instrCode = UMLAL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| SMULL 	{InstWrap inst;
+								inst.instrCode = SMULL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| SMLAL		{InstWrap inst;
+								inst.instrCode = SMLAL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+mem_instruction 	: mem_nmonic 	REGISTER ',' '[' REGISTER ']'						{Src2Wrap wrap; 
+																						wrap.srcType = IMMEDIATE; 
+																						wrap.imm_shmt = 0;
+																						wrap.sign = POSITIVE_SIGN;
+																						int rd = getRegConstant($2);
+																						int rn = getRegConstant($5);
+																						memInstr($1, rn, rd, OFFSET, wrap);}
+
+					| mem_nmonic 	REGISTER ',' '[' REGISTER mem_src2 ']' preindex		{int rd = getRegConstant($2);
+																						int rn = getRegConstant($5);
+																						memInstr($1, rn, rd, $8, $6);}
+
+					| mem_nmonic 	REGISTER ',' '[' REGISTER ']' mem_src2				{int rd = getRegConstant($2);
+																						int rn = getRegConstant($5);
+																						memInstr($1, rn, rd, POST_INDEX, $7);}
+					;
+
+mem_nmonic			: STR 		{InstWrap inst;
+								inst.instrCode = STR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LDR 		{InstWrap inst;
+								inst.instrCode = LDR;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| STRB 		{InstWrap inst;
+								inst.instrCode = STRB;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LDRB 		{InstWrap inst;
+								inst.instrCode = LDRB;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| STRH 		{InstWrap inst;
+								inst.instrCode = STRH;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LDRH 		{InstWrap inst;
+								inst.instrCode = LDRH;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LDRSB 	{InstWrap inst;
+								inst.instrCode = LDRSB;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| LDRSH		{InstWrap inst;
+								inst.instrCode = LDRSH;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+mem_src2 			: ',' sign REGISTER ',' shift_nmonic numerical 		{Src2Wrap wrap; 
+																		wrap.srcType = REG_IMM; 
+																		wrap.rm = getRegConstant($3);
+																		wrap.imm_shmt = $6;
+																		wrap.shiftType = $5.instrCode;
+																		wrap.sign = $2;
+																		$$ = wrap;}
+
+					| ',' sign REGISTER									{Src2Wrap wrap; 
+																		wrap.srcType = REG_IMM; 
+																		wrap.rm = getRegConstant($3);
+																		wrap.imm_shmt = 0;
+																		wrap.shiftType = LSL;
+																		wrap.sign = $2;
+																		$$ = wrap;}
+
+					| ',' numerical										{Src2Wrap wrap; 
+																		wrap.srcType = IMMEDIATE; 
+																		wrap.imm_shmt = $2;
+																		wrap.sign = POSITIVE_SIGN;
+																		$$ = wrap;}
+					;
+
+preindex 			: '!'			{$$ = PRE_INDEX;}
+					| /* empty */ 	{$$ = OFFSET;}
+					;
+
+branch_instruction 	: branch_nmonic IDENTIFIER 		{installRef($1, $2, yylineno);}
+					;
+
+branch_nmonic		: B 		{InstWrap inst;
+								inst.instrCode = B;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					| BL 		{InstWrap inst;
+								inst.instrCode = BL;
+								inst.instSource = $1;
+								$$ = inst;}
+								
+					;
+
+%%
+
+int main(void)
+{
+    extern FILE *yyin;
+    yyin = fopen( "/root/Desktop/Squirrel/src.arm", "r" );
+    if (yyin == 0) {
+    	printf("Error. Can't open the file. Please check it.\n");
+    	return 1;
+    } 
+    /*yydebug = 1;*/
+    _errors = 0;
+    createInstList(100);
+    yyparse ();
+    completeContext();
+    printf ( "Parse Completed. %d errors where found.\n", _errors);
+    if (_errors == 0){
+    	//printInstructionList();
+    	executeCompilation(0);
+    } 
+    /*if ( errors == 0 ) {
+        print_code ();
+        fetch_execute_cycle();
+    }*/
+
+    return 0;
+}

@@ -49,6 +49,8 @@ private slots:
 
     void on_simulateButton_clicked();
 
+    void restartCodeSection();
+
 private:
     QString filePath;
     Ui::SquirrelMain *ui;

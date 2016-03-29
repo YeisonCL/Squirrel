@@ -47,7 +47,7 @@ int verifyLE();
 void startSimulation() //Método que inicia la simulación.
 {
     executeCompilation(COMPILEANDSIMULE);
-    printf("\nStart simulation...\n");
+    printf("Start simulation...\n");
     updateConsole();
     resetMemory();
     resetRegisters();
@@ -55,36 +55,13 @@ void startSimulation() //Método que inicia la simulación.
     int totalInstructions = getLastInstruction();
     while(*(_registers._R15) <= totalInstructions)
     {
-        //DEBUGGING
-        /*
-        printf("\n\n--------------------------------------------------\n");
-        printf("Instruccion: %d\n", *(_registers._R15));
-        printf("\nRegistros PRE-Instruccion\n");
-        printRegisters();
-        printf("\nMemoria PRE-Instruccion\n");
-        printDataMemory();
-        printf("\nFlags PRE-Instruction\n");
-        printFlags();
-        */
-        //DEBUGGING
         int oldPC = *(_registers._R15);
         executeInstruction(getInstruction(*(_registers._R15)));
         *(_registers._R15) = oldPC == *(_registers._R15) ? *(_registers._R15) + 1 : *(_registers._R15);
         updateFlags();
         updateRegisters();
-        //DEBUGGING
-        /*
-        printf("\nRegistros POST-Instruccion\n");
-        printRegisters();
-        printf("\nMemoria POST-Instruccion\n");
-        printDataMemory();
-        printf("\nFlags POST-Instruction\n");
-        printFlags();
-        getchar();
-        */
-        //DEBUGGING
     }
-    printf("\nEnd simulation...\n");
+    printf("End simulation...\n");
     updateConsole();
 }
 

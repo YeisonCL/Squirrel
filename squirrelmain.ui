@@ -173,6 +173,9 @@ border-radius: 4px;
             <height>35</height>
            </rect>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -245,6 +248,9 @@ border-radius: 4px;
             <width>55</width>
             <height>35</height>
            </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -319,6 +325,9 @@ border-radius: 4px;
             <height>35</height>
            </rect>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -391,6 +400,9 @@ border-radius: 4px;
             <width>55</width>
             <height>35</height>
            </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -465,6 +477,9 @@ border-radius: 4px;
             <height>35</height>
            </rect>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -538,6 +553,9 @@ border-radius: 4px;
             <height>35</height>
            </rect>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -610,6 +628,9 @@ border-radius: 4px;
             <width>70</width>
             <height>35</height>
            </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -696,6 +717,9 @@ border-radius: 4px;
             <width>55</width>
             <height>35</height>
            </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -4408,7 +4432,11 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="consoleEdit"/>
+         <widget class="QTextEdit" name="consoleEdit">
+          <property name="cursorWidth">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

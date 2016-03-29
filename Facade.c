@@ -63,7 +63,6 @@ void executeSimulation(const char*pFileDirection) //Método que ejecuta la simul
 {
 
     int errorsParser = executeParser(pFileDirection);
-    //int errorsParser = executeParser("/root/QTProjects/Squirrel/backend/src.armv4");
     updateConsole();
     if(errorsParser == 0)
     {

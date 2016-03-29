@@ -10,14 +10,23 @@
 /*             201258359                     */
 /*********************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 
 #include "Facade.h"
-#include "Memory.h"
-#include "Registers.h"
-#include "Compiled.h"
-#include "Simulation.h"
-#include "Configuration.h"
+#include "backend/ConditionFlags.h"
+#include "backend/MemoryData.h"
+#include "backend/Registers.h"
+#include "backend/Compiled.h"
+#include "backend/Simulation.h"
+#include "backend/Configuration.h"
+#include "backend/ParserMiscellaneous.h"
+#include "backend/InstructionList.h"
+
+struct LogicInterface *_logicInterface;
 
 void instantiateConfigurationVariables() //Método que crea el espacio necesario para la memoria y registros.
 {
@@ -34,16 +43,9 @@ void destroyConfigurationVariables() //Método que libera el espacio asignado pa
     destroyNewSTDOUT();
 }
 
-void changeMemorySize(int pNewMemorySize)
-{
-    _memorySize = pNewMemorySize;
-    createNewMemory();
-}
-
 void executeCompile(const char*pFileDirection) //Método que ejecuta la compilación.
 {
-    int errorsParser = 0;
-    //Ejecutar el parser
+    int errorsParser = executeParser(pFileDirection);
     updateConsole();
     if(errorsParser == 0)
     {
@@ -52,7 +54,7 @@ void executeCompile(const char*pFileDirection) //Método que ejecuta la compilac
 
     else
     {
-        prinft("\nCompilation not execute because many errors are found.\n");
+        printf("\nCompilation not execute because many errors are found.\n");
         updateConsole();
     }
 }
@@ -60,16 +62,17 @@ void executeCompile(const char*pFileDirection) //Método que ejecuta la compilac
 void executeSimulation(const char*pFileDirection) //Método que ejecuta la simulación.
 {
 
-    int errorsParser = 0;
-    //Ejecutar el parser
+    int errorsParser = executeParser(pFileDirection);
+    //int errorsParser = executeParser("/root/QTProjects/Squirrel/backend/src.armv4");
     updateConsole();
     if(errorsParser == 0)
     {
         startSimulation();
+        printf("Simulacion terminada con exito\n");
     }
     else
     {
-        prinft("\nSimulation not execute because many errors are found.\n");
+        printf("\nSimulation not execute because many errors are found.\n");
         updateConsole();
     }
 }
@@ -77,26 +80,35 @@ void executeSimulation(const char*pFileDirection) //Método que ejecuta la simul
 void updateConsole() //Método que actualiza la salida de la consola en la interfaz.
 {
     fflush(stdout);
-    //ENVIAR _newSTDOUT A LA INTERFAZ.
+    updateConsoleCpp(_logicInterface, _newSTDOUT);
     cleanBuffer(_newSTDOUT);
 }
 
 void updateRegisters() //Método que actualiza los valores de los registros en la interfaz.
 {
-    //PASAR TODOS LOS REGISTROS A LA INTERFAZ.
+    updateTextRegistersCpp(_logicInterface, *(_registers._R0), *(_registers._R1), *(_registers._R2), *(_registers._R3), *(_registers._R4), *(_registers._R5), *(_registers._R6), *(_registers._R7), *(_registers._R8), *(_registers._R9), *(_registers._R10), *(_registers._R11), *(_registers._R12), *(_registers._R13), *(_registers._R14), *(_registers._R15));
 }
 
 void updateFlags() //Método que actualiza el valor de las banderas en la interfaz.
 {
-    //PASAR LAS BANDERAS A LA INTERFAZ.
+    updateTextFlagsCpp(_logicInterface, _carry, _negative, _zero, _overflow);
 }
 
 int getClockTime() //Método que devuelve el valor del tiempo de ejecución en segundos.
 {
-    //ESPERAR RESPUESTA JEFFERSON
+    return ((1 * getLastInstruction())/100000);
 }
 
 int *getMemory() //Método que devuelve el valor de la memoria actual.
 {
     return _memory;
 }
+
+void setLogicInterface(struct LogicInterface* p)
+{
+    _logicInterface = p;
+}
+
+#ifdef __cplusplus
+}
+#endif

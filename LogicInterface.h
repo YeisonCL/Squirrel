@@ -14,7 +14,7 @@ public:
     void print(char* pText);
 
 public slots:
-    void compile(char* pPath);
+    void compile(char* pPath, char* pCompiledPath);
     void simulate(char* pPath);
 
 signals:

@@ -31,13 +31,14 @@ SquirrelMain::SquirrelMain(QWidget *parent) :
     QThread *thread = new QThread;
     _logicInterface->moveToThread(thread);
 
-    QObject::connect(this, SIGNAL(executeCompilation(char*)), _logicInterface, SLOT(compile(char*)));
+    QObject::connect(this, SIGNAL(executeCompilation(char*, char*)), _logicInterface, SLOT(compile(char*, char*)));
     QObject::connect(this, SIGNAL(executeSimulation(char*)), _logicInterface, SLOT(simulate(char*)));
 
     QObject::connect(_logicInterface, SIGNAL(signalPrint(QString*)), this, SLOT(updateTextConsole(QString*)));
     QObject::connect(_logicInterface, SIGNAL(signalRefreshRegs(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)),
                      this, SLOT(updateTextRegisters(int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)));
     QObject::connect(_logicInterface, SIGNAL(signalRefreshFlags(int,int,int,int)), this, SLOT(updateTextFlags(int,int,int,int)));
+    ui->consoleEdit->setReadOnly(true);
     thread->start();
 }
 
@@ -118,16 +119,20 @@ void SquirrelMain::updateTextFlags(int pCarry, int pNegative, int pZero, int pOv
     ui->vFlag->setText(QString::number(pOverflow));
 }
 
-void SquirrelMain::on_newButton_clicked()
+void SquirrelMain::restartCodeSection()
 {
     ui->codeEdit->setText("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'Cantarell'; font-size:9pt; font-weight:400; font-style:normal;\" bgcolor=\"#000000\"><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:17px;\"><br /></p></body></html>");
+}
+
+void SquirrelMain::on_newButton_clicked()
+{
+    restartCodeSection();
     ui->label_10->setText("new_file.armv4");
     filePath = "";
 }
 
 void SquirrelMain::on_openButton_clicked()
 {
-    on_newButton_clicked();
     filePath = QFileDialog::getOpenFileName(this, tr("Open ARMv4 File"), "/root", tr("ARMv4 File (*.armv4)"));
     if(filePath != "")
     {
@@ -139,6 +144,7 @@ void SquirrelMain::on_openButton_clicked()
         QString fileRead = in.readAll();
         ui->label_10->setText(file.fileName());
         file.close();
+        restartCodeSection();
         ui->codeEdit->append(fileRead);
     }
 }
@@ -180,8 +186,11 @@ void SquirrelMain::on_saveButton_clicked()
 void SquirrelMain::on_compileButton_clicked()
 {
     char *path= (char*)malloc(512*sizeof(char));
+    char *compiledPath = (char*)malloc(1024*sizeof(char));
+    QString compiledPathQ = QFileDialog::getSaveFileName(this, tr("Save Compiled File"), "/root/out.txt", tr("Txt File (*.txt)"));
     strcpy(path, filePath.toStdString().c_str());
-    emit executeCompilation(path);
+    strcpy(compiledPath, compiledPathQ.toStdString().c_str());
+    emit executeCompilation(path, compiledPath);
 }
 
 void SquirrelMain::on_simulateButton_clicked()

@@ -20,6 +20,7 @@ extern "C" {
 #include <stdlib.h>
 
 #include "Compiled.h"
+#include "Configuration.h"
 #include "MemoryData.h"
 #include "Registers.h"
 #include "Instructions.h"
@@ -197,7 +198,7 @@ void executeCompilation(int pTypeCompilation)
     //pTypeCompilation == COMPILE -> Solo modo de compilacion (generación de archivo).
     //pTypeCompilation == COMPILEANDSIMULE -> Modo de compilación + simulación (no generación de archivo, guardado en memoria).
 
-    printf("\nStart compilation...\n");
+    printf("Start compilation...\n");
     updateConsole();
     updateConsole();
     verifyTypeCompilation(pTypeCompilation, START);
@@ -208,7 +209,7 @@ void executeCompilation(int pTypeCompilation)
         saveCompiledInstruction(pTypeCompilation, compiledInstruction, i);
     }
     verifyTypeCompilation(pTypeCompilation, END);
-    printf("\nEnd compilation...\n");
+    printf("End compilation...\n");
     updateConsole();
 }
 
@@ -216,7 +217,7 @@ void verifyTypeCompilation(int pTypeCompilation, int pControlFlag)
 {
     if(pTypeCompilation == COMPILE && pControlFlag == START)
     {
-        compiledFile = fopen("/root/Escritorio/out.txt", "w");
+        compiledFile = fopen(_compiledFileDirection, "w");
         writeHeader();
     }
     else if(pTypeCompilation == COMPILE && pControlFlag == END)

@@ -20,7 +20,7 @@ public:
 
 signals:
     void executeSimulation(char *pPath);
-    void executeCompilation(char *pPath);
+    void executeCompilation(char *pPath, char *pCompiledPath);
 
 
 public slots:
@@ -48,6 +48,8 @@ private slots:
     void on_compileButton_clicked();
 
     void on_simulateButton_clicked();
+
+    void restartCodeSection();
 
 private:
     QString filePath;

@@ -15,9 +15,10 @@ LogicInterface::LogicInterface()
     setLogicInterface(this);
 }
 
-void LogicInterface::compile(char* pPath){
-    executeCompile(pPath);
+void LogicInterface::compile(char* pPath, char* pCompiledPath){
+    executeCompile(pPath, pCompiledPath);
     free(pPath);
+    free(pCompiledPath);
 }
 
 void LogicInterface::simulate(char* pPath){

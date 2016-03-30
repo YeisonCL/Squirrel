@@ -32,6 +32,7 @@ void instantiateConfigurationVariables() //Método que crea el espacio necesario
 {
     createAllRegisters();
     createMemory();
+    createCompiledFileDirection();
     createNewSTDOUT();
     redirectSTDOUT();
 }
@@ -43,8 +44,9 @@ void destroyConfigurationVariables() //Método que libera el espacio asignado pa
     destroyNewSTDOUT();
 }
 
-void executeCompile(const char*pFileDirection) //Método que ejecuta la compilación.
+void executeCompile(const char *pFileDirection, char *pFileCompiledDirection) //Método que ejecuta la compilación.
 {
+    setCompiledFileDirection(pFileCompiledDirection);
     int errorsParser = executeParser(pFileDirection);
     updateConsole();
     if(errorsParser == 0)
@@ -63,7 +65,6 @@ void executeSimulation(const char*pFileDirection) //Método que ejecuta la simul
 {
 
     int errorsParser = executeParser(pFileDirection);
-    //int errorsParser = executeParser("/root/QTProjects/Squirrel/backend/src.armv4");
     updateConsole();
     if(errorsParser == 0)
     {

@@ -15,4 +15,6 @@ Instruction *getInstruction(int pInstNum);                      // Obtiene una i
 int getLastInstruction();                                       // Devuelve la ultima instruccion
 void printInstructionList();
 
+void destroyInstructionList();                                  // Destruye la lista de instrucciones
+
 #endif

@@ -370,28 +370,21 @@ branch_nmonic		: B 		{InstWrap inst;
 
 %%
 
-int main(void)
+int executeParser(const char* pFileDirection)
 {
     extern FILE *yyin;
-    yyin = fopen( "/root/Desktop/Squirrel/src.arm", "r" );
+    yyin = fopen(pFileDirection, "r" );
     if (yyin == 0) {
     	printf("Error. Can't open the file. Please check it.\n");
     	return 1;
     } 
-    /*yydebug = 1;*/
     _errors = 0;
+    yylineno = 0;
     createInstList(100);
+    destroyRefList();
+    destroySymbTable();
     yyparse ();
     completeContext();
     printf ( "Parse Completed. %d errors where found.\n", _errors);
-    if (_errors == 0){
-    	//printInstructionList();
-    	executeCompilation(0);
-    } 
-    /*if ( errors == 0 ) {
-        print_code ();
-        fetch_execute_cycle();
-    }*/
-
-    return 0;
+    return _errors;
 }

@@ -33,13 +33,14 @@ void destroyRef(Symref *pRef){
 
 /* Esta función destruye la lista de referencias */
 void destroyRefList(){
-    Symref *ref;
+    Symref *ref = _refList;
     Symref *refTemp;
     while (ref != 0){
         refTemp = ref->next;
         destroyRef(ref);
         ref = refTemp;
     }
+    _refList = 0;
 }
 
 #ifdef __cplusplus

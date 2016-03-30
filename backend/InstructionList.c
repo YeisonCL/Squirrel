@@ -11,6 +11,9 @@ Instruction **_instList = 0;
 int _instSize = 0;
 
 void createInstList(int pListSize){
+    if (_instList != 0){
+        destroyInstructionList();
+    }
 	_instList 	= (Instruction **) malloc(sizeof(Instruction*)*pListSize); 	// Se crea una lista de punteros a punteros de instrucciones.
 	_nextInst 	= 0; 														// Se inicializa la direccion de la siguiente instruccion en 0
     _instSize   = pListSize;
@@ -51,6 +54,15 @@ Instruction *getInstruction(int pInstNum){
 
 int getLastInstruction(){
     return _nextInst-1;
+}
+
+void destroyInstructionList() {
+    Instruction **iInst = _instList;
+    for (int i = 0; i < _nextInst; i = i+1){
+        free(*((Instruction **)(iInst+sizeof(Instruction*)*i)));
+    }
+    free(_instList);
+    _instList = 0;
 }
 
 #ifdef __cplusplus

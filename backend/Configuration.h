@@ -15,6 +15,10 @@
 
 extern char *_newSTDOUT;
 extern int _memorySize;
+extern int _dataMemStart;
+extern int _dataMemSize;
+extern int _instrMemStart;
+extern int _instMemSize;
 
 void createNewSTDOUT();
 void destroyNewSTDOUT();

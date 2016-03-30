@@ -7,6 +7,7 @@ extern "C" {
 #include "Instructions.h"
 #include "InstructionList.h"
 #include "ARMYacc.tab.h"
+#include "Configuration.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -14,6 +15,7 @@ extern "C" {
 
 int _errors = 0;
 extern int yylineno;
+extern void yyerror ( char *s );
 
 /* Esta función se encarga de añadir un nuevo simbolo a la tabla 
 *  realizando las validaciones necesarias, estos simbolos corresponden unicamente a labels
@@ -53,6 +55,14 @@ void completeContext () {
 
         while (!refFound && iSymrec != 0){                                  // Mientras no se haya encontrado el simbolo y no se acaben los simbolos entonces:
             if (strcmp(iSymref->idval, iSymrec->idval) == 0){               // Comparación de identificadores
+
+                int goodSize = checkBitSize(iSymrec->code_offset, 24);
+                if (!goodSize){
+                    _errors = _errors + 1;
+                    printf("line: %d. CONTEXT ERROR: The branch address is out of allowed size, it most be 24 bits representable.\n", iSymref->sourceLine);
+                    return;
+                }
+
                 refFound = 1;                                               // Se ha encontrado el símbolo
                 iSymref->instruction->imm_shmt = iSymrec->code_offset;      // Añadir la posicion de memoria a la que se debe de dar el salto
                 addReserveInst(iSymref->instruction, iSymref->instNumber);  // Añadir la instrucción
@@ -205,13 +215,15 @@ Instruction *memInstr(InstWrap pInstWrap, int pRn, int pRd, int pIndexMode, Src2
 }
 
 Instruction *dataImmInstr(int pInstruction, const char * pSourceInst, int pRn, int pRd, int pImm){
+
     Instruction *inst 	= (Instruction *) malloc(sizeof(Instruction)); 	// Pedir memoria
     inst->instrType 	= pInstruction;
 
     RotInfo *rot = valDataImm(pImm);
     if (rot == 0){
-        yyerror(); printf(" CONTEXT ERROR: The immediate value must be of 8 bits or allows 4 bit ARM right rotation.\n");
-        return 0;
+        yyerror(""); printf(" CONTEXT ERROR: The immediate value must be 8 bits representable or allows 4 bit ARM right rotation.\n");
+        free(rot);
+        return inst;
     }
 
     const char *instRoot = getInstLit(pInstruction);
@@ -233,8 +245,15 @@ Instruction *dataImmInstr(int pInstruction, const char * pSourceInst, int pRn, i
 }
 
 Instruction *dataRegShImmInstr(int pInstruction, const char *pSourceInst, int pRn, int pRd, int pShamnt, int pShiftType, int pRm){
+
     Instruction *inst 	= (Instruction *) malloc(sizeof(Instruction)); 	// Pedir memoria
     inst->instrType 	= pInstruction;
+
+    int goodSize = checkBitSize(pShamnt, 5);
+    if (!goodSize){
+        yyerror(""); printf(" CONTEXT ERROR: Shamnt value most be 5 bits representable.\n");
+        return 0;
+    }
 
     const char *instRoot = getInstLit(pInstruction);
     int cond = getInstConditional(pSourceInst, instRoot);
@@ -294,8 +313,15 @@ Instruction *multiplyInstr(int pInstruction, const char *pSourceInst, int pRd, i
 }
 
 Instruction *memImmInstr(int pInstruction, const char *pSourceInst, int pAddOffset, int pIndexMode, int pRn, int pRd, int pImm){
+
     Instruction *inst 	= (Instruction *) malloc(sizeof(Instruction)); 	// Pedir memoria
     inst->instrType 	= pInstruction;
+
+    int goodSize = checkBitSize(pImm, 12);
+    if (!goodSize){
+        yyerror(""); printf(" CONTEXT ERROR: Memory instructions immediate value most be 12 bits representable.\n");
+        return inst;
+    }
 
     const char *instRoot = getInstLit(pInstruction);
     int cond = getInstConditional(pSourceInst, instRoot);
@@ -313,8 +339,15 @@ Instruction *memImmInstr(int pInstruction, const char *pSourceInst, int pAddOffs
 }
 
 Instruction *memRegInstr(int pInstruction, const char *pSourceInst, int pAddOffset, int pIndexMode, int pRn, int pRd, int pShamnt, int pShiftType, int pRm){
+
     Instruction *inst 	= (Instruction *) malloc(sizeof(Instruction)); 	// Pedir memoria
     inst->instrType 	= pInstruction;
+
+    int goodSize = checkBitSize(pShamnt, 5);
+    if (!goodSize){
+        yyerror(""); printf(" CONTEXT ERROR: Shamnt value most be 5 bits representable.\n");
+        return inst;
+    }
 
     const char *instRoot = getInstLit(pInstruction);
     int cond = getInstConditional(pSourceInst, instRoot);
@@ -334,8 +367,15 @@ Instruction *memRegInstr(int pInstruction, const char *pSourceInst, int pAddOffs
 }
 
 Instruction *extraMemImmInstr(int pInstruction, const char *pSourceInst, int pAddOffset, int pIndexMode, int pRn, int pRd, int pImm){
+
     Instruction *inst 	= (Instruction *) malloc(sizeof(Instruction)); 	// Pedir memoria
     inst->instrType 	= pInstruction;
+
+    int goodSize = checkBitSize(pImm, 8);
+    if (!goodSize){
+        yyerror(""); printf(" CONTEXT ERROR: Immediate value most be 8 bits representable.\n");
+        return inst;
+    }
 
     const char *instRoot = getInstLit(pInstruction);
     int cond = getInstConditional(pSourceInst, instRoot);
@@ -387,6 +427,23 @@ RotInfo *valDataImm(unsigned int pImm) {
     info->rot 		= rot/2;
     info->seed 		= val;
     return info;
+}
+
+int checkBitSize(int pNum, int pSize){
+    if (pSize == 8){
+        return pNum < 256;
+    }
+    if (pSize == 5){
+        return pNum < 32;
+    }
+    if (pSize == 12){
+        return pNum < 4096;
+    }
+    if (pSize == 24){
+        return pNum < 16777216;
+    }
+    printf("Inner Error. Size check not supported.\n");
+    return 0;
 }
 
 #ifdef __cplusplus

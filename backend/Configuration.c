@@ -21,7 +21,11 @@ extern "C" {
 #include "Configuration.h"
 
 char *_newSTDOUT;
-int _memorySize = 0;
+int _memorySize     = 2048;     // Tamaño total de la memoria
+int _dataMemStart   = 1024;     // Inicio de la memoria de datos
+int _dataMemSize    = 1024;     // Tamaño de la memoria de datos
+int _instrMemStart  = 0;        // Inicio de la memoria de programa
+int _instMemSize    = 1024;     // Tamaño de la memoria de programa
 
 void createNewSTDOUT()
 {

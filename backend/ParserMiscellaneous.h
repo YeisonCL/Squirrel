@@ -34,7 +34,6 @@ int haveSetFlags(const char* pInstr, const char* pRootInst);            // Esta 
 int getInstConditional(const char* pInstr, const char* pRootInst);      // Esta función obtiene el tipo de condicional que tiene la instrucción
 
 int getRegConstant(char *pReg);                                         // Devuelve el valor de constante según el archivo Instructions.h que representa al registro
-int checkBitSize(int pNum, int pSize);                                  // Revisa el tamaño de un numero según su cantidad de bits, dentro de los rangos soportados: 5, 8, 12, 24
 
 // Funciones para generar Instruction según los tipos de instrucciones de ARM
 Instruction *dataInstr(InstWrap pInstWrap, int pRn, int pRd, Src2Wrap pSrc2);
@@ -53,5 +52,5 @@ int executeParser(const char* pFileDirection);
 
 // Funciones para validación de datos
 RotInfo *valDataImm(unsigned int pImm);
-
+int checkBitSize(int pNum, int pSize);      // Revisa el tamaño de un numero según su cantidad de bits, dentro de los rangos soportados: 5, 8, 12, 24
 #endif

@@ -48,13 +48,14 @@ void destroySymb(Symrec *pSymbol){
 
 /* Esta función destruye la tabla de simbolos */
 void destroySymbTable(){
-    Symrec *symbol;
+    Symrec *symbol = _symTable;
     Symrec *symTemp;
     while (symbol != 0){
         symTemp = symbol->next;
         destroySymb(symbol);
         symbol = symTemp;
     }
+    _symTable = 0;
 }
 
 #ifdef __cplusplus

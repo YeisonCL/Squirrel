@@ -131,6 +131,7 @@ void SquirrelMain::on_newButton_clicked()
     restartCodeSection();
     ui->label_10->setText("new_file.armv4");
     filePath = "";
+    resetMemoryFacade();
 }
 
 void SquirrelMain::on_openButton_clicked()
@@ -150,6 +151,7 @@ void SquirrelMain::on_openButton_clicked()
         restartCodeSection();
         ui->codeEdit->append(fileRead);
         originalText = fileRead;
+        resetMemoryFacade();
     }
     else
     {
@@ -258,6 +260,7 @@ void SquirrelMain::on_simulateButton_clicked()
     if(filePath == "")
     {
         on_saveButton_clicked();
+        if (filePath == "") return;
     }
     if(originalText != ui->codeEdit->toPlainText())
     {

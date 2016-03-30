@@ -48,14 +48,15 @@ int verifyLE();
 void startSimulation() //Método que inicia la simulación.
 {
     _executionError = 0;
+
+    resetRegisters();
+    resetFlags();
+
     executeCompilation(COMPILEANDSIMULE);
 
     printf("Simulating... ");
     updateConsole();
 
-    resetMemory();
-    resetRegisters();
-    resetFlags();
     int totalInstructions = getLastInstruction();
     while(*(_registers._R15) <= totalInstructions)
     {
@@ -72,9 +73,16 @@ void startSimulation() //Método que inicia la simulación.
             updateRegisters();
         }
     }
-    printf("Ok.\n");
-    updateConsole();
+
+    if (!_executionError)
+    {
+        printf("Ok.\n");
+        float clock = ((1 * getLastInstruction())/100000.0);
+        printf("Aproximated real clock time: %f seconds.", clock);
+        updateConsole();
+    }
 }
+
 
 void executeInstruction(Instruction *pInstruction)
 {

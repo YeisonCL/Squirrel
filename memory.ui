@@ -175,7 +175,7 @@ border-top: 1px solid rgb(230, 230, 230);
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_17">
+            <widget class="QLineEdit" name="startEdit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -199,6 +199,15 @@ border-top: 1px solid rgb(230, 230, 230);
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &amp;lt;enter&amp;gt; to go to the direction&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="inputMethodHints">
+              <set>Qt::ImhDigitsOnly</set>
+             </property>
+             <property name="text">
+              <string>1024</string>
              </property>
              <property name="frame">
               <bool>true</bool>
@@ -226,7 +235,7 @@ border-top: 1px solid rgb(230, 230, 230);
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_19">
+            <widget class="QLineEdit" name="finnishEdit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -250,6 +259,15 @@ border-top: 1px solid rgb(230, 230, 230);
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &amp;lt;enter&amp;gt; to go to the direction&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="inputMethodHints">
+              <set>Qt::ImhDigitsOnly</set>
+             </property>
+             <property name="text">
+              <string>2048</string>
              </property>
              <property name="frame">
               <bool>true</bool>
@@ -401,7 +419,7 @@ border-top: 1px solid rgb(230, 230, 230);
                  <x>0</x>
                  <y>0</y>
                  <width>670</width>
-                 <height>267</height>
+                 <height>278</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout">
@@ -440,26 +458,16 @@ border-top: 1px solid rgb(230, 230, 230);
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Ok</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
   </layout>
-  <zorder>lineEdit_9</zorder>
-  <zorder>widget_7</zorder>
-  <zorder>memContWid</zorder>
-  <zorder>memConfLabel</zorder>
-  <zorder>horizontalSpacer_3</zorder>
-  <zorder>horizontalSpacer_4</zorder>
-  <zorder>widget_8</zorder>
-  <zorder>horizontalSpacer_6</zorder>
  </widget>
+ <tabstops>
+  <tabstop>startEdit</tabstop>
+  <tabstop>finnishEdit</tabstop>
+  <tabstop>scrollArea</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

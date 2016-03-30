@@ -83,11 +83,6 @@ void updateFlags() //Método que actualiza el valor de las banderas en la interf
     updateTextFlagsCpp(_logicInterface, _carry, _negative, _zero, _overflow);
 }
 
-int getClockTime() //Método que devuelve el valor del tiempo de ejecución en segundos.
-{
-    return ((1 * getLastInstruction())/100000);
-}
-
 int *getMemory() //Método que devuelve el valor de la memoria actual.
 {
     return _memory;
@@ -96,6 +91,9 @@ int *getMemory() //Método que devuelve el valor de la memoria actual.
 void setLogicInterface(struct LogicInterface* p)
 {
     _logicInterface = p;
+}
+void resetMemoryFacade(){
+    resetMemory();
 }
 
 #ifdef __cplusplus

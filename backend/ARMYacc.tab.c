@@ -2140,7 +2140,7 @@ int executeParser(const char* pFileDirection)
     /*yydebug = 1;*/
     _errors = 0;
     yylineno = 1;
-    createInstList(100);
+    createInstList(2000);
     destroyRefList();
     destroySymbTable();
     yyparse ();

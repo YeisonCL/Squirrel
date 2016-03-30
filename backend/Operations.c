@@ -1201,11 +1201,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1218,11 +1220,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1236,11 +1240,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1262,11 +1268,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1279,11 +1287,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1297,11 +1307,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1323,11 +1335,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1340,11 +1354,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1358,11 +1374,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1385,11 +1403,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1402,11 +1422,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1420,11 +1442,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1448,11 +1472,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1465,11 +1491,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1483,11 +1511,13 @@ void STRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1522,11 +1552,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1539,11 +1571,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1557,11 +1591,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1583,11 +1619,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1600,11 +1638,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1618,11 +1658,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1644,11 +1686,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1661,11 +1705,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1679,11 +1725,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1706,11 +1754,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1723,11 +1773,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1741,11 +1793,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1769,11 +1823,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1786,11 +1842,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if((address % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1804,11 +1862,13 @@ void LDRInstructionAux(Instruction *pInstruction)
             if(((*getRegister(pInstruction->r_n)) % 4) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -1991,7 +2051,7 @@ void LDRBInstructionAux(Instruction *pInstruction)
             *getRegister(pInstruction->r_n) = address;
         }
         else if(pInstruction->indexMode == POST_INDEX)
-        {                        
+        {
             unsigned char *memInByte = (unsigned char *)((unsigned char*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
             *getRegister(pInstruction->r_d) = *memInByte;
             *getRegister(pInstruction->r_n) = address;
@@ -2125,11 +2185,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2143,11 +2205,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2162,11 +2226,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2189,11 +2255,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2207,11 +2275,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2226,11 +2296,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2253,11 +2325,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2271,11 +2345,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2290,11 +2366,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2318,11 +2396,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2336,11 +2416,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2355,11 +2437,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2384,11 +2468,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2402,11 +2488,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2421,11 +2509,13 @@ void STRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2461,11 +2551,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2479,11 +2571,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2498,11 +2592,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2525,11 +2621,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2543,11 +2641,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2562,11 +2662,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2589,11 +2691,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2607,11 +2711,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2626,11 +2732,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2654,11 +2762,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2672,11 +2782,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2691,11 +2803,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2720,11 +2834,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2738,11 +2854,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2757,11 +2875,13 @@ void LDRHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2938,11 +3058,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2956,11 +3078,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -2975,11 +3099,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3002,11 +3128,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3020,11 +3148,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3039,11 +3169,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3066,11 +3198,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3084,11 +3218,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3103,11 +3239,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3131,11 +3269,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3149,11 +3289,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3168,11 +3310,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3197,11 +3341,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3215,11 +3361,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((address % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else
@@ -3234,11 +3382,13 @@ void LDRSHInstructionAux(Instruction *pInstruction)
             if((*getRegister(pInstruction->r_n) % 2) != 0)
             {
                 printf("Execution error: Address not aligned.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
             {
                 printf("Execution error: Address out of bound.\n");
+                updateConsole();
                 _executionError = 1;
             }
             else

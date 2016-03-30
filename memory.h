@@ -17,10 +17,22 @@ public:
     ~Memory();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_startEdit_returnPressed();
+
+    void on_finnishEdit_returnPressed();
+
+    void on_startEdit_selectionChanged();
+
+    void on_finnishEdit_selectionChanged();
+
+    void slotMemChange(QString pText);
 
 private:
     Ui::Memory *ui;
+    void loadMemory(int pStart, int pFinnish);
+    void setMemory(int pAddress, int pData);
+    int _lastStart;
+    int _lastFinnish;
 };
 
 #endif // MEMORY_H

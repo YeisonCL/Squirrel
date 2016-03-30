@@ -43,7 +43,6 @@ void instantiateConfigurationVariables(); //Método que crea el espacio necesari
 void destroyConfigurationVariables(); //Método que libera el espacio asignado para la memoria, registros y nueva salida estandar.
 void executeCompile(const char*pFileDirection, char *pFileCompiledDirection); //Método que ejecuta la compilación.
 void executeSimulation(const char*pFileDirection); //Método que ejecuta la simulación.
-int getClockTime(); //Método que devuelve el valor del tiempo de ejecución en segundos.
 int *getMemory(); //Método que devuelve el valor de la memoria actual.
 
 
@@ -56,5 +55,6 @@ void updateTextRegistersCpp(struct LogicInterface* p, int pRegister0, int pRegis
 void updateTextFlagsCpp(struct LogicInterface* p, int pCarry, int pNegative, int pZero, int pOverflow);
 
 void setLogicInterface(struct LogicInterface* p);
+void resetMemoryFacade();
 
 #endif

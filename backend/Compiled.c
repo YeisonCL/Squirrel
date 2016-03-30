@@ -250,7 +250,7 @@ void saveCompiledInstruction(int pTypeCompilation, int pInstruction, int pIndex)
         char *instructionStr = (char*) calloc(32, sizeof (char));
         char *indexStr = (char*) calloc(32, sizeof (char));
         sprintf(instructionStr, "%X", (unsigned int)pInstruction);
-        sprintf(indexStr, "%X", (unsigned int)pIndex);
+        sprintf(indexStr, "%X", (unsigned int)pIndex*4);
         strcat(indexStr, "\t");
         strcat(instructionStr, "\n");
         fprintf(compiledFile, "0x");

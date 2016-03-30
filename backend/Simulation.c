@@ -47,6 +47,7 @@ int verifyLE();
 
 void startSimulation() //Método que inicia la simulación.
 {
+    _executionError = 0;
     executeCompilation(COMPILEANDSIMULE);
     printf("Start simulation...\n");
     updateConsole();

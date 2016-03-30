@@ -31,7 +31,7 @@ SquirrelMain::SquirrelMain(QWidget *parent) :
     QThread *thread = new QThread;
     _logicInterface->moveToThread(thread);
 
-    QObject::connect(this, SIGNAL(executeCompilation(char*)), _logicInterface, SLOT(compile(char*)));
+    QObject::connect(this, SIGNAL(executeCompilation(char*, char*)), _logicInterface, SLOT(compile(char*, char*)));
     QObject::connect(this, SIGNAL(executeSimulation(char*)), _logicInterface, SLOT(simulate(char*)));
 
     QObject::connect(_logicInterface, SIGNAL(signalPrint(QString*)), this, SLOT(updateTextConsole(QString*)));
@@ -186,8 +186,11 @@ void SquirrelMain::on_saveButton_clicked()
 void SquirrelMain::on_compileButton_clicked()
 {
     char *path= (char*)malloc(512*sizeof(char));
+    char *compiledPath = (char*)malloc(1024*sizeof(char));
+    QString compiledPathQ = QFileDialog::getSaveFileName(this, tr("Save Compiled File"), "/root/out.txt", tr("Txt File (*.txt)"));
     strcpy(path, filePath.toStdString().c_str());
-    emit executeCompilation(path);
+    strcpy(compiledPath, compiledPathQ.toStdString().c_str());
+    emit executeCompilation(path, compiledPath);
 }
 
 void SquirrelMain::on_simulateButton_clicked()

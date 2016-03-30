@@ -44,8 +44,9 @@ void destroyConfigurationVariables() //Método que libera el espacio asignado pa
     destroyNewSTDOUT();
 }
 
-void executeCompile(const char*pFileDirection) //Método que ejecuta la compilación.
+void executeCompile(const char *pFileDirection, char *pFileCompiledDirection) //Método que ejecuta la compilación.
 {
+    setCompiledFileDirection(pFileCompiledDirection);
     int errorsParser = executeParser(pFileDirection);
     updateConsole();
     if(errorsParser == 0)

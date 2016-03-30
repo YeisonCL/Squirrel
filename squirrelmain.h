@@ -20,7 +20,7 @@ public:
 
 signals:
     void executeSimulation(char *pPath);
-    void executeCompilation(char *pPath);
+    void executeCompilation(char *pPath, char *pCompiledPath);
 
 
 public slots:

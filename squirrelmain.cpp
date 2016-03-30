@@ -133,6 +133,7 @@ void SquirrelMain::on_newButton_clicked()
 
 void SquirrelMain::on_openButton_clicked()
 {
+    QString oldFilePath = filePath;
     filePath = QFileDialog::getOpenFileName(this, tr("Open ARMv4 File"), "/root", tr("ARMv4 File (*.armv4)"));
     if(filePath != "")
     {
@@ -146,6 +147,10 @@ void SquirrelMain::on_openButton_clicked()
         file.close();
         restartCodeSection();
         ui->codeEdit->append(fileRead);
+    }
+    else
+    {
+        filePath = oldFilePath;
     }
 }
 

@@ -53,12 +53,6 @@ void executeCompile(const char *pFileDirection, char *pFileCompiledDirection) //
     {
         executeCompilation(COMPILE);
     }
-
-    else
-    {
-        printf("\nCompilation not execute because many errors are found.\n");
-        updateConsole();
-    }
 }
 
 void executeSimulation(const char*pFileDirection) //Método que ejecuta la simulación.
@@ -69,13 +63,7 @@ void executeSimulation(const char*pFileDirection) //Método que ejecuta la simul
     if(errorsParser == 0)
     {
         startSimulation();
-        printf("Simulacion terminada con exito\n");
-    }
-    else
-    {
-        printf("\nSimulation not execute because many errors are found.\n");
-        updateConsole();
-    }
+    }    
 }
 
 void updateConsole() //Método que actualiza la salida de la consola en la interfaz.

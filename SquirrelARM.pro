@@ -32,7 +32,8 @@ SOURCES += \
     backend/Registers.c \
     backend/Simulation.c \
     backend/Symbols.c \
-    LogicInterface.cpp
+    LogicInterface.cpp \
+    highlighter.cpp
 
 HEADERS  += \
     about.h \
@@ -54,7 +55,8 @@ HEADERS  += \
     backend/Registers.h \
     backend/Simulation.h \
     backend/Symbols.h \
-    LogicInterface.h
+    LogicInterface.h \
+    highlighter.h
 
 RESOURCES += \
     resources.qrc

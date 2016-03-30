@@ -40,6 +40,8 @@ SquirrelMain::SquirrelMain(QWidget *parent) :
     QObject::connect(_logicInterface, SIGNAL(signalRefreshFlags(int,int,int,int)), this, SLOT(updateTextFlags(int,int,int,int)));
     ui->consoleEdit->setReadOnly(true);
     thread->start();
+
+    _highlighter = new Highlighter(ui->codeEdit->document());
 }
 
 SquirrelMain::~SquirrelMain()
@@ -185,6 +187,15 @@ void SquirrelMain::on_saveButton_clicked()
 
 void SquirrelMain::on_compileButton_clicked()
 {
+
+    QString hist = ui->consoleEdit->toHtml();
+    if (!ui->consoleEdit->toPlainText().isEmpty()) {
+        hist = QString("<p style=\"color: #BEBEBE; \">")
+                + hist + QString ("---------------------------------------------------------------------") + QString("<br /></p>");
+        ui->consoleEdit->setText("");
+        ui->consoleEdit->append(hist);
+    }
+
     char *path= (char*)malloc(512*sizeof(char));
     char *compiledPath = (char*)malloc(1024*sizeof(char));
     QString compiledPathQ = QFileDialog::getSaveFileName(this, tr("Save Compiled File"), "/root/out.txt", tr("Txt File (*.txt)"));
@@ -195,6 +206,13 @@ void SquirrelMain::on_compileButton_clicked()
 
 void SquirrelMain::on_simulateButton_clicked()
 {
+    QString hist = ui->consoleEdit->toHtml();
+    if (!ui->consoleEdit->toPlainText().isEmpty()) {
+        hist = QString("<p style=\"color: #BEBEBE; \">")
+                + hist + QString ("---------------------------------------------------------------------") + QString("<br /></p>");
+        ui->consoleEdit->setText("");
+        ui->consoleEdit->append(hist);
+    }
     char *path= (char*)malloc(512*sizeof(char));
     strcpy(path, filePath.toStdString().c_str());
 

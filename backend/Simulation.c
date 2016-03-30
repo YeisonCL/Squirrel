@@ -46,9 +46,12 @@ int verifyLE();
 
 void startSimulation() //Método que inicia la simulación.
 {
+
     executeCompilation(COMPILEANDSIMULE);
-    printf("Start simulation...\n");
+
+    printf("Simulating... ");
     updateConsole();
+
     resetMemory();
     resetRegisters();
     resetFlags();
@@ -61,7 +64,7 @@ void startSimulation() //Método que inicia la simulación.
         updateFlags();
         updateRegisters();
     }
-    printf("End simulation...\n");
+    printf("Ok.\n");
     updateConsole();
 }
 

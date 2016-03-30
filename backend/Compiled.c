@@ -198,9 +198,9 @@ void executeCompilation(int pTypeCompilation)
     //pTypeCompilation == COMPILE -> Solo modo de compilacion (generación de archivo).
     //pTypeCompilation == COMPILEANDSIMULE -> Modo de compilación + simulación (no generación de archivo, guardado en memoria).
 
-    printf("Start compilation...\n");
+    printf("Compiling... ");
     updateConsole();
-    updateConsole();
+
     verifyTypeCompilation(pTypeCompilation, START);
     int totalInstructions = getLastInstruction();
     for(i = 0; i <= totalInstructions; i = i + 1)
@@ -209,7 +209,8 @@ void executeCompilation(int pTypeCompilation)
         saveCompiledInstruction(pTypeCompilation, compiledInstruction, i);
     }
     verifyTypeCompilation(pTypeCompilation, END);
-    printf("End compilation...\n");
+
+    printf("Ok.\n");
     updateConsole();
 }
 

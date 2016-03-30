@@ -4,6 +4,7 @@
 #include <QTextLine>
 #include <QMainWindow>
 #include "LogicInterface.h"
+#include "highlighter.h"
 
 namespace Ui {
 class SquirrelMain;
@@ -56,6 +57,7 @@ private:
     Ui::SquirrelMain *ui;
     int currentTextLine(const QTextCursor &cursor);    
     LogicInterface* _logicInterface;
+    Highlighter *_highlighter;
 };
 
 #endif // SQUIRRELMAIN_H

@@ -23,6 +23,7 @@ extern "C" {
 
 char *_newSTDOUT;
 
+int _executionError  = 0;
 int _memorySize     = 2048;     // Tamaño total de la memoria
 int _dataMemStart   = 1024;     // Inicio de la memoria de datos
 int _dataMemSize    = 1024;     // Tamaño de la memoria de datos

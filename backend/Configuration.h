@@ -16,6 +16,7 @@
 extern char *_newSTDOUT;
 extern int _memorySize;
 
+extern int _executionError;
 extern int _dataMemStart;
 extern int _dataMemSize;
 extern int _instrMemStart;

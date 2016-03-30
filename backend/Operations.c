@@ -18,6 +18,7 @@ extern "C" {
 #include <stdlib.h>
 
 #include "Registers.h"
+#include "Configuration.h"
 #include "Operations.h"
 #include "ConditionFlags.h"
 #include "MemoryData.h"
@@ -1197,17 +1198,56 @@ void STRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1219,17 +1259,56 @@ void STRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1241,17 +1320,56 @@ void STRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1264,17 +1382,56 @@ void STRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1288,17 +1445,56 @@ void STRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            _memory[address/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[address/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                _memory[(*getRegister(pInstruction->r_n))/4] = *getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1323,17 +1519,56 @@ void LDRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1345,17 +1580,56 @@ void LDRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1367,17 +1641,56 @@ void LDRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1390,17 +1703,56 @@ void LDRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1414,17 +1766,56 @@ void LDRInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[address/4];
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[address/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
-            *getRegister(pInstruction->r_n) = address;
+            if(((*getRegister(pInstruction->r_n)) % 4) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if((*getRegister(pInstruction->r_n)) < _dataMemStart || (*getRegister(pInstruction->r_n)) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                *getRegister(pInstruction->r_d) = _memory[(*getRegister(pInstruction->r_n))/4];
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1731,20 +2122,59 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1756,20 +2186,59 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1781,20 +2250,59 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1807,20 +2315,59 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1834,20 +2381,59 @@ void STRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *memInByte = (unsigned short)*getRegister(pInstruction->r_d);
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1872,20 +2458,59 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1897,20 +2522,59 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1922,20 +2586,59 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1948,20 +2651,59 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -1975,20 +2717,59 @@ void LDRHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                unsigned short *memInByte = (unsigned short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -2154,20 +2935,59 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ?  *getRegister(pInstruction->r_n) + pInstruction->imm_shmt : *getRegister(pInstruction->r_n) - pInstruction->imm_shmt;
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -2179,20 +2999,59 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -2204,20 +3063,59 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt) : *getRegister(pInstruction->r_n) - (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->imm_shmt);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -2230,20 +3128,59 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + newValueRegister :  *getRegister(pInstruction->r_n) - newValueRegister;
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {
@@ -2257,20 +3194,59 @@ void LDRSHInstructionAux(Instruction *pInstruction)
         int address = pInstruction->addOffset == 1 ? *getRegister(pInstruction->r_n) + (shiftOne + shiftTwo) : *getRegister(pInstruction->r_n) - (shiftOne + shiftTwo);
         if(pInstruction->indexMode == OFFSET)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+            }
         }
         else if(pInstruction->indexMode == PRE_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((address % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(address < _dataMemStart || address >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+address/4) + address%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else if(pInstruction->indexMode == POST_INDEX)
         {
-            short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
-            *getRegister(pInstruction->r_d) = *memInByte;
-            *getRegister(pInstruction->r_n) = address;
+            if((*getRegister(pInstruction->r_n) % 2) != 0)
+            {
+                printf("Execution error: Address not aligned.\n");
+                _executionError = 1;
+            }
+            else if(*getRegister(pInstruction->r_n) < _dataMemStart || *getRegister(pInstruction->r_n) >= (_dataMemStart + _dataMemSize))
+            {
+                printf("Execution error: Address out of bound.\n");
+                _executionError = 1;
+            }
+            else
+            {
+                short *memInByte = (short *)((unsigned short*)(_memory+*getRegister(pInstruction->r_n)/4) + *getRegister(pInstruction->r_n)%4);
+                *getRegister(pInstruction->r_d) = *memInByte;
+                *getRegister(pInstruction->r_n) = address;
+            }
         }
         else
         {

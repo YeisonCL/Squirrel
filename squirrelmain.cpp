@@ -135,6 +135,7 @@ void SquirrelMain::on_newButton_clicked()
 
 void SquirrelMain::on_openButton_clicked()
 {
+    QString oldFilePath = filePath;
     filePath = QFileDialog::getOpenFileName(this, tr("Open ARMv4 File"), "/root", tr("ARMv4 File (*.armv4)"));
     if(filePath != "")
     {
@@ -148,6 +149,11 @@ void SquirrelMain::on_openButton_clicked()
         file.close();
         restartCodeSection();
         ui->codeEdit->append(fileRead);
+        originalText = fileRead;
+    }
+    else
+    {
+        filePath = oldFilePath;
     }
 }
 
@@ -161,6 +167,7 @@ void SquirrelMain::on_saveButton_clicked()
             QFile file(filePath);
             if ( file.open(QIODevice::ReadWrite) )
             {
+                originalText = ui->codeEdit->toPlainText();
                 QTextStream saveFile(&file);
                 saveFile << ui->codeEdit->toPlainText()<< endl;
             }
@@ -175,6 +182,7 @@ void SquirrelMain::on_saveButton_clicked()
         QFile file(filePath);
         if ( file.open(QIODevice::ReadWrite) )
         {
+            originalText = ui->codeEdit->toPlainText();
             QTextStream saveFile(&file);
             saveFile << ui->codeEdit->toPlainText()<< endl;
         }
@@ -198,10 +206,44 @@ void SquirrelMain::on_compileButton_clicked()
 
     char *path= (char*)malloc(512*sizeof(char));
     char *compiledPath = (char*)malloc(1024*sizeof(char));
+
+    if(filePath == "")
+    {
+        on_saveButton_clicked();
+    }
+    if(originalText != ui->codeEdit->toPlainText())
+    {
+        QMessageBox question;
+        question.setIconPixmap(QPixmap(":/icons/icons/warning_icon.png"));
+        question.setWindowTitle("Save");
+        question.setText("There are unsaved changes. ¿Do you want to save them or compile the previous file?");
+        QAbstractButton* saveButton = question.addButton(tr("Save"), QMessageBox::ActionRole);
+        QAbstractButton* compileButton = question.addButton(tr("Compile"), QMessageBox::AcceptRole);
+        QAbstractButton* cancelButton = question.addButton(tr("Cancel"), QMessageBox::NoRole);
+        question.exec();
+        if (question.clickedButton() == saveButton)
+        {
+            on_saveButton_clicked();
+        }
+        else if(question.clickedButton() == cancelButton)
+        {
+            return;
+        }
+        else if(question.clickedButton() == compileButton)
+        {
+            ;
+        }
+    }
+
     QString compiledPathQ = QFileDialog::getSaveFileName(this, tr("Save Compiled File"), "/root/out.txt", tr("Txt File (*.txt)"));
-    strcpy(path, filePath.toStdString().c_str());
-    strcpy(compiledPath, compiledPathQ.toStdString().c_str());
-    emit executeCompilation(path, compiledPath);
+    if(compiledPathQ != "")
+    {
+        char *path= (char*)malloc(512*sizeof(char));
+        char *compiledPath = (char*)malloc(1024*sizeof(char));
+        strcpy(path, filePath.toStdString().c_str());
+        strcpy(compiledPath, compiledPathQ.toStdString().c_str());
+        emit executeCompilation(path, compiledPath);
+    }
 }
 
 void SquirrelMain::on_simulateButton_clicked()
@@ -213,8 +255,34 @@ void SquirrelMain::on_simulateButton_clicked()
         ui->consoleEdit->setText("");
         ui->consoleEdit->append(hist);
     }
+    if(filePath == "")
+    {
+        on_saveButton_clicked();
+    }
+    if(originalText != ui->codeEdit->toPlainText())
+    {
+        QMessageBox question;
+        question.setIconPixmap(QPixmap(":/icons/icons/warning_icon.png"));
+        question.setWindowTitle("Save");
+        question.setText("There are unsaved changes. ¿Do you want to save them or run the previous file?");
+        QAbstractButton* saveButton = question.addButton(tr("Save"), QMessageBox::ActionRole);
+        QAbstractButton* runButton = question.addButton(tr("Run"), QMessageBox::AcceptRole);
+        QAbstractButton* cancelButton = question.addButton(tr("Cancel"), QMessageBox::NoRole);
+        question.exec();
+        if (question.clickedButton() == saveButton)
+        {
+            on_saveButton_clicked();
+        }
+        else if(question.clickedButton() == cancelButton)
+        {
+            return;
+        }
+        else if(question.clickedButton() == runButton)
+        {
+            ;
+        }
+    }
     char *path= (char*)malloc(512*sizeof(char));
     strcpy(path, filePath.toStdString().c_str());
-
     emit executeSimulation(path);
 }

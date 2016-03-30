@@ -8,6 +8,7 @@
         <file>icons/close_icon.png</file>
         <file>icons/memory_icon.png</file>
         <file>icons/about_icon.png</file>
+        <file>icons/warning_icon.png</file>
     </qresource>
     <qresource prefix="/pictures">
         <file>squirrel.png</file>

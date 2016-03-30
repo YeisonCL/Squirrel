@@ -53,6 +53,7 @@ private slots:
     void restartCodeSection();
 
 private:
+    QString originalText;
     QString filePath;
     Ui::SquirrelMain *ui;
     int currentTextLine(const QTextCursor &cursor);    

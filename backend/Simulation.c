@@ -26,6 +26,7 @@ extern "C" {
 #include "Compiled.h"
 #include "InstructionList.h"
 #include "Facade.h"
+#include "Configuration.h"
 
 void executeInstruction(Instruction *pInstruction); //Método encargado de ejecutar una instrucción.
 void verifyInstruction(Instruction *pInstruction);
@@ -46,7 +47,7 @@ int verifyLE();
 
 void startSimulation() //Método que inicia la simulación.
 {
-
+    _executionError = 0;
     executeCompilation(COMPILEANDSIMULE);
 
     printf("Simulating... ");
@@ -60,9 +61,16 @@ void startSimulation() //Método que inicia la simulación.
     {
         int oldPC = *(_registers._R15);
         executeInstruction(getInstruction(*(_registers._R15)));
-        *(_registers._R15) = oldPC == *(_registers._R15) ? *(_registers._R15) + 1 : *(_registers._R15);
-        updateFlags();
-        updateRegisters();
+        if(_executionError)
+        {
+            break;
+        }
+        else
+        {
+            *(_registers._R15) = oldPC == *(_registers._R15) ? *(_registers._R15) + 1 : *(_registers._R15);
+            updateFlags();
+            updateRegisters();
+        }
     }
     printf("Ok.\n");
     updateConsole();

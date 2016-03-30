@@ -23,6 +23,17 @@ extern "C" {
 
 char *_newSTDOUT;
 int _memorySize = 0;
+char *_compiledFileDirection = "";
+
+void createCompiledFileDirection()
+{
+    _compiledFileDirection = (char*)calloc(1024, sizeof(char));
+}
+
+void setCompiledFileDirection(char *pDirection)
+{
+    strcpy(_compiledFileDirection, pDirection);
+}
 
 void createNewSTDOUT()
 {

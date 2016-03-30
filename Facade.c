@@ -32,6 +32,7 @@ void instantiateConfigurationVariables() //Método que crea el espacio necesario
 {
     createAllRegisters();
     createMemory();
+    createCompiledFileDirection();
     createNewSTDOUT();
     redirectSTDOUT();
 }

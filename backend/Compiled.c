@@ -20,6 +20,7 @@ extern "C" {
 #include <stdlib.h>
 
 #include "Compiled.h"
+#include "Configuration.h"
 #include "MemoryData.h"
 #include "Registers.h"
 #include "Instructions.h"
@@ -216,7 +217,7 @@ void verifyTypeCompilation(int pTypeCompilation, int pControlFlag)
 {
     if(pTypeCompilation == COMPILE && pControlFlag == START)
     {
-        compiledFile = fopen("/root/Desktop/Squirrel/out.txt", "w");
+        compiledFile = fopen(_compiledFileDirection, "w");
         writeHeader();
     }
     else if(pTypeCompilation == COMPILE && pControlFlag == END)

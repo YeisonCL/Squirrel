@@ -24,6 +24,7 @@ extern "C" {
 #include "MemoryData.h"
 #include "ParserMiscellaneous.h"
 #include "ARMYacc.tab.h"
+#include "Facade.h"
 
 void ANDInstructionAux(Instruction *pInstruction, int *pRd);
 void EORInstructionAux(Instruction *pInstruction, int *pRd);
@@ -154,8 +155,8 @@ void ANDInstructionAux(Instruction *pInstruction, int *pRd)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *pRd = *(getRegister(pInstruction->r_n)) & newValueRegister;
     }
@@ -237,8 +238,8 @@ void EORInstructionAux(Instruction *pInstruction, int *pRd)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *pRd = *(getRegister(pInstruction->r_n)) ^ newValueRegister;
     }
@@ -327,8 +328,8 @@ void SUBInstructionAux(Instruction *pInstruction, int *pRd)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *pRd = *(getRegister(pInstruction->r_n)) - newValueRegister;
         verifyCarryAndOverflowSUB(pInstruction->setFlags, *(getRegister(pInstruction->r_n)), newValueRegister);
@@ -419,8 +420,8 @@ void RSBInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *(getRegister(pInstruction->r_d)) = newValueRegister - *(getRegister(pInstruction->r_n));
         verifyCarryAndOverflowSUB(pInstruction->setFlags, newValueRegister, *(getRegister(pInstruction->r_n)));
@@ -510,8 +511,8 @@ void ADDInstructionAux(Instruction *pInstruction, int *pRd)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *pRd = *(getRegister(pInstruction->r_n)) + newValueRegister;
         verifyCarryAndOverflowADD(pInstruction->setFlags, *(getRegister(pInstruction->r_n)), newValueRegister);
@@ -565,7 +566,7 @@ void TSTInstruction(Instruction *pInstruction)
     int *result = (int*) calloc(1, sizeof (int));
     ANDInstructionAux(pInstruction, result);
     _carry = 0;
-    _zero = result == 0 ? 1 : 0;
+    _zero = *result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
     free(result);
 }
@@ -575,7 +576,7 @@ void TEQInstruction(Instruction *pInstruction)
     int *result = (int*) calloc(1, sizeof (int));
     EORInstructionAux(pInstruction, result);
     _carry = 0;
-    _zero = result == 0 ? 1 : 0;
+    _zero = *result == 0 ? 1 : 0;
     _negative = (int)((unsigned int)*result >> 31) == 0 ? 0 : 1;
     free(result);
 }
@@ -674,8 +675,8 @@ void ORRInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *(getRegister(pInstruction->r_d)) = *(getRegister(pInstruction->r_n)) | newValueRegister;
     }
@@ -752,8 +753,8 @@ void MOVInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         *(getRegister(pInstruction->r_d)) = shiftOne + shiftTwo;
     }
     else
@@ -781,7 +782,7 @@ void LSLInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG)
     {
-        *(getRegister(pInstruction->r_d)) = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << pInstruction->r_sa);
+        *(getRegister(pInstruction->r_d)) = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << *(getRegister(pInstruction->r_sa)));
     }
     else
     {
@@ -808,7 +809,7 @@ void LSRInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG)
     {
-        *(getRegister(pInstruction->r_d)) = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        *(getRegister(pInstruction->r_d)) = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
     }
     else
     {
@@ -847,11 +848,11 @@ void ASRInstructionAux(Instruction *pInstruction)
         int newValueRegister = 0;
         if(*(getRegister(pInstruction->r_m)) < 0)
         {
-            newValueRegister = *(getRegister(pInstruction->r_m)) >> pInstruction->r_sa;
+            newValueRegister = *(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa));
         }
         else
         {
-            newValueRegister = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+            newValueRegister = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         }
         *(getRegister(pInstruction->r_d)) = newValueRegister;
     }
@@ -906,8 +907,8 @@ void RORInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         *(getRegister(pInstruction->r_d))  = shiftOne + shiftTwo;;
     }
     else
@@ -988,8 +989,8 @@ void BICInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         int newValueRegister = shiftOne + shiftTwo;
         *(getRegister(pInstruction->r_d)) = *(getRegister(pInstruction->r_n)) & ~newValueRegister;
     }
@@ -1066,8 +1067,8 @@ void MVNInstructionAux(Instruction *pInstruction)
     }
     else if(pInstruction->src2Type == REG_REG && pInstruction->shift_type == ROR)
     {
-        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - pInstruction->r_sa));
-        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> pInstruction->r_sa);
+        int shiftOne = (int)((unsigned int)*(getRegister(pInstruction->r_m)) << (32 - *(getRegister(pInstruction->r_sa))));
+        int shiftTwo = (int)((unsigned int)*(getRegister(pInstruction->r_m)) >> *(getRegister(pInstruction->r_sa)));
         *(getRegister(pInstruction->r_d)) = ~(shiftOne + shiftTwo);
     }
     else
@@ -1091,7 +1092,7 @@ void MULInstruction(Instruction *pInstruction)
 
 void MULInstructionAux(Instruction *pInstruction)
 {
-     long long newValueRegister = *(getRegister(pInstruction->r_n)) * *(getRegister(pInstruction->r_m));
+     unsigned long long newValueRegister = (unsigned long long)*(getRegister(pInstruction->r_n)) * (unsigned long long)*(getRegister(pInstruction->r_m));
     *(getRegister(pInstruction->r_d)) = (unsigned int)newValueRegister;
 }
 
@@ -1107,7 +1108,7 @@ void MLAInstruction(Instruction *pInstruction)
 
 void MLAInstructionAux(Instruction *pInstruction)
 {
-    long long newValueRegister = (*(getRegister(pInstruction->r_n)) * *(getRegister(pInstruction->r_m))) + *(getRegister(pInstruction->r_sa));
+    unsigned long long newValueRegister = ((unsigned long long)*(getRegister(pInstruction->r_n)) * (unsigned long long)*(getRegister(pInstruction->r_m))) + (unsigned long long)*(getRegister(pInstruction->r_sa));
     *(getRegister(pInstruction->r_d)) = (unsigned int)newValueRegister;
 }
 
@@ -1123,7 +1124,7 @@ void UMULLInstruction(Instruction *pInstruction)
 
 void UMULLInstructionAux(Instruction *pInstruction)
 {
-    long long newValueRegister = (unsigned int)*(getRegister(pInstruction->r_n)) * (unsigned int)*(getRegister(pInstruction->r_m));
+    unsigned long long newValueRegister = (unsigned long long)*(getRegister(pInstruction->r_n)) * (unsigned long long)*(getRegister(pInstruction->r_m));
     *(getRegister(pInstruction->r_d)) = (unsigned int)newValueRegister; //LSB
     newValueRegister = (unsigned long long)newValueRegister >> 32;
     *(getRegister(pInstruction->r_sa)) = (unsigned int)newValueRegister; //MSB

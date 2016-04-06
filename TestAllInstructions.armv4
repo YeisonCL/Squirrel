@@ -1,0 +1,303 @@
+;*********************************************
+;           Instituto Tecnológico de Costa Rica
+;           Ingeniería en Computadores
+;           Arquitectura de Computadores
+;           I Semestre 2016
+;*********************************************
+
+;Precarga en la dirección 0x404 (1028) el valor -0x1000 el cual es equivalente unsigned de 0xFFFFF000
+;Precarga en la dirección 0x408 (1032) el valor -0xF38 el cual es equivalente unsigned de 0xFFFFF0C8
+
+;R0 -> Operando número uno.
+;R1 -> Operando número dos.
+;R2 '-> Resultado de la operación.
+;R3 -> Resultado esperado.
+
+;R4 -> Direccion de resultado NO esperado.
+;R5 -> Resultado NO esperado.
+
+MOV R4, #0x400
+
+;AND
+
+MOV R0, #25
+MOV R1, #45
+MOV R3, #9
+AND R2, R0, R1
+CMP R3, R2
+BEQ EORTest
+MOV R5, #0
+STR R5, [R4]
+B Exit
+
+;EOR
+
+EORTest
+	MOV R0, #25
+	MOV R1, #45
+	MOV R3, #52
+	EOR R2, R0, R1
+	CMP R3, R2
+	BEQ SUBTest
+	MOV R5, #1
+	STR R5, [R4]
+	B Exit
+
+;SUB
+
+SUBTest
+	MOV R0, #45
+	MOV R1, #25
+	MOV R3, #20
+	SUB R2, R0, R1
+	CMP R3, R2
+	BEQ RSBTest
+	MOV R5, #2
+	STR R5, [R4]
+	B Exit
+
+;RSB
+
+RSBTest
+	MOV R0, #25
+	MOV R3, #20
+	RSB R2, R0, #45
+	CMP R3, R2
+	BEQ ADDTest
+	MOV R5, #3
+	STR R5, [R4]
+	B Exit
+
+;ADD
+
+ADDTest
+	MOV R0, #100
+	MOV R1, #105
+	MOV R3, #205
+	ADD R2, R0, R1
+	CMP R3, R2
+	BEQ ADCTest
+	MOV R5, #4
+	STR R5, [R4]
+	B Exit
+
+;ADC
+
+ADCTest
+	MOV R8, #0xF0000000
+	MOV R1, #0x70000000
+	ADDS R0, R8, R1
+	MOV R8, #0
+	MOV R0, #100
+	MOV R1, #105
+	MOV R3, #206
+	ADC R2, R0, R1
+	CMP R3, R2
+	BEQ SBCTest
+	MOV R5, #5
+	STR R5, [R4]
+	B Exit
+
+;SBC
+
+SBCTest
+	MOV R0, #105
+	MOV R1, #100
+	MOV R3, #5
+	SBC R2, R0, R1
+	CMP R3, R2
+	BEQ RSCTest
+	MOV R5, #6
+	STR R5, [R4]
+	B Exit
+
+;RSC
+
+RSCTest
+	MOV R0, #105
+	MOV R3, #95
+	RSC R2, R0, #200
+	CMP R3, R2
+	BEQ TSTTest
+	MOV R5, #7
+	STR R5, [R4]
+	B Exit
+
+;TST
+
+TSTTest
+	MOV R0, #105
+	MOV R3, #0
+	TST R0, R3, #0
+	BEQ TEQTest
+	MOV R5, #8
+	STR R5, [R4]
+	B Exit
+
+;TEQ
+
+TEQTest
+	MOV R3, #105
+	TEQ R0, R3, #105
+	BEQ CMNTest
+	MOV R5, #9
+	STR R5, [R4]
+	B Exit
+
+;CMN
+
+CMNTest
+	MOV R0, #105
+	MOV R3, #105
+	CMN R0, R3
+	BNE ORRTest
+	MOV R5, #10
+	STR R5, [R4]
+	B Exit
+
+;ORR
+
+ORRTest
+	MOV R0, #105
+	MOV R1, #115
+	MOV R3, #123
+	ORR R2, R0, R1
+	CMP R2, R3
+	BEQ LSLTest
+	MOV R5, #11
+	STR R5, [R4]
+	B Exit
+
+;LSL
+
+LSLTest
+	MOV R0, #55
+	MOV R3, #220
+	LSL R2, R0, #2
+	CMP R2, R3
+	BEQ LSRTest
+	MOV R5, #12
+	STR R5, [R4]
+	B Exit
+
+;LSR
+
+LSRTest
+	MOV R0, #55
+	MOV R1, #2
+	MOV R3, #13
+	LSR R2, R0, R1
+	CMP R2, R3
+	BEQ ASRTest
+	MOV R5, #13
+	STR R5, [R4]
+	B Exit
+
+;ASR
+
+ASRTest
+	MOV R0, #0
+	SUB R0, R0, #200
+	MOV R1, #3
+	MOV R3, #0
+	SUB R3, R3, #25
+	ASR R2, R0, R1
+	CMP R2, R3
+	BEQ RRXTest
+	MOV R5, #14
+	STR R5, [R4]
+	B Exit
+
+;RRX
+
+RRXTest
+	MOV R0, #0x40000000
+	MOV R1, #0x50000000
+	ADDS R0, R0, R1
+	MOV R1, #0
+	MOV R0, #0
+	SUB R0, R0, #25
+	MOV R3, #0
+	SUB R3, R3, #13
+	LSL R3, R3, #1
+	LSR R3, R3, #1
+	RRX R0, R0, #1
+	CMP R0, R3
+	BEQ RORTest
+	MOV R5, #15
+	STR R5, [R4]
+	B Exit
+
+;ROR
+
+RORTest
+	MOV R0, #0
+	SUB R0, R0, #32
+	MOV R3, #0
+	SUB R3, R3, #32
+	LSR R3, R3, #3
+	ROR R2, R0, #3
+	CMP R2, R3
+	BEQ BICTest
+	MOV R5, #16
+	STR R5, [R4]
+	B Exit
+
+;BIC
+
+BICTest
+	MOV R0, #20
+	MOV R1, #35
+	MOV R3, #20
+	BIC R2, R0, R1
+	CMP R2, R3
+	BEQ MVNTest
+	MOV R5, #17
+	STR R5, [R4]
+	B Exit
+
+;MVN
+
+MVNTest
+	MOV R0, #1
+	MOV R3, #0
+	SUB R3, R3, #2
+	MVN R2, R0, R0
+	CMP R2, R3
+	BEQ MULTest
+	MOV R5, #18
+	STR R5, [R4]
+
+;MUL
+
+MULTest
+	MOV R0, #0
+	SUB R0, R0, #1
+	MOV R1, #4096
+	MOV R3, #0x400
+	LDR R3, [R3, #4]
+	MUL R2, R0, R1
+	CMP R2, R3
+	BEQ MLATest
+	MOV R5, #19
+	STR R5, [R4]
+
+;MLA
+
+MLATest
+	MOV R0, #0
+	SUB R0, R0, #1
+	MOV R1, #4096
+	MOV R3, #0x400
+	LDR R3, [R3, #8]
+	MOV R7, #200
+	MLA R2, R0, R1, R7
+	MOV R7, #0
+	CMP R2, R3
+	BEQ Exit
+	MOV R5, #20
+	STR R5, [R4]
+
+Exit
+
+

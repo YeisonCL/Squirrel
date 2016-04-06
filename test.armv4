@@ -1,0 +1,50 @@
+;*********************************************
+;           Instituto Tecnológico de Costa Rica
+;           Ingeniería en Computadores
+;           Arquitectura de Computadores
+;           I Semestre 2016
+;           
+;           Author: Yeison Arturo Cruz León
+;           Carné: 201258348
+;*********************************************
+
+;Algoritmo de cálculo de Fibonacci.
+
+;SE DEBE PONER CON ANTICIPACIÓN EN LA DIRECCIÓN 0X404 (1028) EL VALOR DE 0XFF.
+;SE DEBE PONER CON ANTICIPACIÓN EN LA DIRECCIÓN 0X408 (1032) EL VALOR DE NÚMEROS DE FIBONACI QUE SE QUIEREN CALCULAR.
+
+MOV R0, #0x400; Movemos el valor 0x400 (1024) al registro R0 para usarlo como registro base en el direccionamiento a memoria. 
+MOV R1, #0xF0 ; Guardamos el valor correspondiente a la petición de envio de términos.
+STR R1, [R0, #0] ; Guardamos el valor de la petición de envios en la direccion 0x400 (1024).
+MOV R2, #0xFF ; Cargamos en R2 el valor de terminación de espera.
+
+WAIT
+      LDR R1, [R0, #4] ; Cargamos en R1 el valor de la dirección 0x404 (1028).
+      CMP R1, R2 ; Comparamos si ya fue enviado el comando de respuesta.
+      BEQ CONTINUE ; Si son iguales nos salimos del ciclo, sino, continuamos de forma normal.
+      B WAIT ; Volvemos a esperar.
+
+CONTINUE
+      MOV R0, #0x400 ; Movemos la dirección base de R0 a 0x400 (1024). 
+      LDR R1, [R0, #8] ; Cargamos en R1 la cantidad de términos de Fibonacci.
+      MOV R0, #0x440 ; Movemos la dirección base de R0 a 0x440 (1088).
+      MOV R2, #0 ; Guardamos el valor de 0 en el registro R2.
+      SUB R2, R2, #1 ; Restamos uno al registro R2 de tal forma que el valor empiece en -1.
+      MOV R3, #1 ; Usaremos el registro R3 como variable para calculos.
+      MOV R4, #0 ; Usaremos el registro R4 como índice para un ciclo for.
+      B FIBONACCI
+
+FIBONACCI
+      CMP R4, R1 ; Comparamos si ya calculamos todos los numeros de Fibonacci.
+      BEQ EXIT ; Salimos pues ya calculamos todos los números de Fibonacci solicitados.
+      MOV R5, #0 ; Ponemos el registro R5 en cero para R5 = R2 + R3.
+      ADD R5, R5, R2 ; Sumamos el registro R2 a R5.
+      ADD R5, R5, R3 ; Sumamos el registro R3 a R5.
+      STR R5, [R0, #0] ; Guardamos el numero de Fibonacci en la direccion dada.
+      ADD R0, R0, #4 ; Aumentamos la dirección en 1 palabra.
+      MOV R2, R3 ; Movemos el contenido de R3 a R2.
+      MOV R3, R5 ; Movemos el contenido de R5 a R3.
+      ADD R4, R4, #1 ; Nos devolvemos a calcular un nuevo número de la secuencia.
+      B FIBONACCI
+
+EXIT
